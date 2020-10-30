@@ -20,6 +20,7 @@ INDENT = ' ' * 4
 # Output Formatting
 
 def print_error(*lines):
+    lines = list(lines)
     line = lines.pop(0)
     print(COLORS['error_title'](str(line)))
     if lines:
@@ -28,6 +29,9 @@ def print_error(*lines):
 
 
 # User Input Prompts
+
+def sanitize_input(val):
+    return val.strip()
 
 class ValidationError(Exception):
     """Raised if input validation fails"""
@@ -53,12 +57,16 @@ def validate_nonempty(val, error_msg=None):
 
 def prompt(prompt_text, *extended_description,
            default_val=None, validate_function=validate_nonempty,
+           sanitize_function=sanitize_input, format_function=None,
            invalid_msg=None, initial_input=None, trailing_newline=True):
     # TODO DOC
     # If input for this prompt was given via an argument, attempt to validate
     # it and bypass prompt
     if initial_input is not None:
         try:
+            initial_input = sanitize_function(initial_input)
+            if format_function is not None:
+                initial_input = format_function(initial_input)
             val = validate_function(initial_input, invalid_msg)
         except ValidationError as e:
             print_error(e)
@@ -72,9 +80,11 @@ def prompt(prompt_text, *extended_description,
     ) + ': ')
 
     while True:
-        val = input(text).strip()
+        val = sanitize_function(input(text))
         if default_val is not None and not val:
             val = default_val
+        if format_function is not None:
+            val = format_function(val)
         try:
             val = validate_function(val, invalid_msg)
         except ValidationError as e:
