@@ -3,9 +3,11 @@ from git import Repo
 from git.exc import InvalidGitRepositoryError, NoSuchPathError
 
 from . import utils
+from . import workflow
 
 
 def main():
+    # Initialize Repo object
     repo = None
     try:
         repo = Repo(os.getcwd(), search_parent_directories=True)
@@ -16,11 +18,12 @@ def main():
     finally:
         if repo is None:
             return
-
+    # Is the minimum git version met for advanced features?
     min_git_version_met = utils.repo.verify_git_version()
-    # TODO DEBUGGING
-    print(repo)
-    print(min_git_version_met)
+    # TODO Subcommand argument parsing
+    command = workflow.Branch(repo, min_git_version_met)
+    command.run()
+
 
 if __name__ == '__main__':
     main()
