@@ -2,8 +2,7 @@ import os
 from git import Repo
 from git.exc import InvalidGitRepositoryError, NoSuchPathError
 
-from . import utils
-from . import workflow
+from git_workflow import utils, workflow
 
 
 def main():
