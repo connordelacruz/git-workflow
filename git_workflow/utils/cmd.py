@@ -29,13 +29,39 @@ INDENT = ' ' * 4
 
 # Output Formatting
 
-def print_error(*lines):
+def print_multiline(*lines, formatting=None, first_line_formatting=None,
+                    indent=True, indent_first_line=False):
+    """Print multiple lines
+
+    :param lines: Positional parameters will each be printed on their own line
+    :param formatting: (Optional) Set to a formatting constant to format each
+        line
+    :param first_line_formatting: (Optional) Set to override formatting for the
+        first line
+    :param indent: (Default: True) If True and there's multiple lines, indent
+        all lines after the first
+    :param indent_first_line: (Default: False) If True, indent the first line
+    """
+    if formatting not in COLORS:
+        formatting = None
+    if first_line_formatting is None or first_line_formatting not in COLORS:
+        first_line_formatting = formatting
+    fmt_func = COLORS[formatting]
+    first_line_fmt_func = COLORS[first_line_formatting]
+
     lines = list(lines)
-    line = lines.pop(0)
-    print(COLORS[ERROR_TITLE](str(line)))
+    first_line = lines.pop(0)
+    first_line_prefix = INDENT if indent_first_line else ''
+    print(first_line_fmt_func(first_line_prefix + str(first_line)))
+
     if lines:
+        line_prefix = INDENT if indent else ''
         for line in lines:
-            print(INDENT + COLORS[ERROR](line))
+            print(fmt_func(line_prefix + str(line)))
+
+
+def print_error(*lines):
+    print_multiline(*lines, first_line_formatting=ERROR_TITLE, formatting=ERROR)
 
 
 # User Input Prompts
