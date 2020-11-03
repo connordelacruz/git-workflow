@@ -5,15 +5,25 @@ from blessings import Terminal
 # Globals
 
 _term = Terminal()
+
+# Keys into COLORS
+ERROR = 'error'
+ERROR_TITLE = 'error_title'
+WARNING = 'warning'
+SUCCESS = 'success'
+INFO = 'info'
+PROMPT = 'prompt'
+#: Dictionary mapping indices to formatting functions
 COLORS = {
     None: str,
-    'error': _term.red,
-    'error_title': _term.bold_red,
-    'warning': _term.yellow,
-    'success': _term.green,
-    'info': _term.cyan,
-    'prompt': _term.magenta,
+    ERROR: _term.red,
+    ERROR_TITLE: _term.bold_red,
+    WARNING: _term.yellow,
+    SUCCESS: _term.green,
+    INFO: _term.cyan,
+    PROMPT: _term.magenta,
 }
+#: String to use when indenting output
 INDENT = ' ' * 4
 
 
@@ -22,10 +32,10 @@ INDENT = ' ' * 4
 def print_error(*lines):
     lines = list(lines)
     line = lines.pop(0)
-    print(COLORS['error_title'](str(line)))
+    print(COLORS[ERROR_TITLE](str(line)))
     if lines:
         for line in lines:
-            print(INDENT + COLORS['error'](line))
+            print(INDENT + COLORS[ERROR](line))
 
 
 # User Input Prompts
@@ -75,7 +85,7 @@ def prompt(prompt_text, *extended_description,
 
     if extended_description:
         print(*extended_description, sep='\n')
-    text = COLORS['prompt']('> ' + (
+    text = COLORS[PROMPT]('> ' + (
         '{} [{}]'.format(prompt_text, default_val) if default_val is not None else prompt_text
     ) + ': ')
 
