@@ -1,6 +1,8 @@
 import datetime
 import re
 
+from git import Head, Remote
+
 from git_workflow.utils import cmd
 from .base import WorkflowBase
 
@@ -9,10 +11,48 @@ class Branch(WorkflowBase):
     # TODO DOCUMENT SCRIPT ABOVE
 
     def format_branch_name(self, val):
-        return re.sub('[ _ ]+', '-', val.lower())
+        """Convert text to lowercase and replace spaces and underscores with
+        hyphens.
 
-    def run(self):
-        # TODO EXTRACT PROMPTS TO FUNCTION?
+        :param val: Text to format
+
+        :return: Formatted text
+        """
+        return re.sub('[ _]+', '-', val.lower())
+
+    # TODO use configs and update default docs
+    # TODO self.print output
+    def create_branch(self, branch_name, base_branch='master',
+                      update_base_branch=True):
+        """Create a new branch.
+
+        :param branch_name: The name of the new branch to create
+        :param base_branch: (Default: 'master') New branch will be based off
+            this branch
+        :param update_base_branch: (Default: True) If true, attempt to pull
+            changes to base_branch before branching
+
+        :return: New branch name
+        """
+        # Checkout base_branch
+        base = Head(self.repo, 'refs/heads/' + base_branch)
+        if self.repo.active_branch != base:
+            base.checkout()
+        # Update
+        if update_base_branch and base.tracking_branch():
+            remote_name = base.tracking_branch().remote_name
+            remote = Remote(self.repo, remote_name)
+            fetch_info = remote.pull()
+        # Checkout new branch
+        return base.checkout(b=branch_name)
+
+    def get_args(self):
+        """Parse command line arguments and prompt for any missing values.
+
+        :return: A dicionary with the following keys:
+            client, description, initials, timestamp
+        """
+        args = {}
         # TODO if not args.no_client: else: client = ''
         arg_client = None # TODO see if any values were passed in args
         client = cmd.prompt(
@@ -24,6 +64,9 @@ class Branch(WorkflowBase):
         )
         if client:
             client += '-'
+        else:
+            client = ''
+        args['client'] = client
 
         arg_description = None # TODO args.description
         description = cmd.prompt(
@@ -34,6 +77,7 @@ class Branch(WorkflowBase):
             format_function=self.format_branch_name,
         )
         description += '-'
+        args['description'] = description
 
         arg_initials = None # TODO arg.initials or config.initials, print info if configured
         initials = cmd.prompt(
@@ -43,13 +87,23 @@ class Branch(WorkflowBase):
             initial_input=arg_initials,
             format_function=self.format_branch_name,
         )
+        args['initials'] = initials
 
         # TODO TICKET #
 
         # TODO allow arg override
         timestamp = datetime.datetime.now().strftime('%Y%m%d-')
+        args['timestamp'] = timestamp
 
-        branch_name = client + description + timestamp + initials
+        return args
+
+
+    def run(self):
+        args = self.get_args()
+        branch_name = args['client'] + args['description'] + args['timestamp'] + args['initials']
+        # TODO check for bad branch names if configured
+        # TODO pass configs and args:
+        new_branch = self.create_branch(branch_name)
         # TODO DEBUG
-        print(branch_name)
+        print(new_branch)
 
