@@ -29,10 +29,12 @@ INDENT = ' ' * 4
 
 # Output Formatting
 
-def print_multiline(*lines, formatting=None, first_line_formatting=None,
+def print_multiline(first_line, *lines,
+                    formatting=None, first_line_formatting=None,
                     indent=True, indent_first_line=False):
     """Print multiple lines
 
+    :param first_line: First line to print
     :param lines: Positional parameters will each be printed on their own line
     :param formatting: (Optional) Set to a formatting constant to format each
         line
@@ -49,8 +51,6 @@ def print_multiline(*lines, formatting=None, first_line_formatting=None,
     fmt_func = COLORS[formatting]
     first_line_fmt_func = COLORS[first_line_formatting]
 
-    lines = list(lines)
-    first_line = lines.pop(0)
     first_line_prefix = INDENT if indent_first_line else ''
     print(first_line_fmt_func(first_line_prefix + str(first_line)))
 
@@ -69,14 +69,17 @@ def print_error(*lines):
 def sanitize_input(val):
     return val.strip()
 
+
 class ValidationError(Exception):
     """Raised if input validation fails"""
     pass
 
 
 def validate_optional_prompt(val, error_msg=None):
-    # TODO doc
+    """Dummy validation function for optional prompts. Just returns val"""
+    # TODO Should there just be an option in prompt()? If input is non-blank you'll probably still wanna validate it
     return val
+
 
 def validate_nonempty(val, error_msg=None):
     """Raises ValidationError if val is empty
@@ -95,7 +98,30 @@ def prompt(prompt_text, *extended_description,
            default_val=None, validate_function=validate_nonempty,
            sanitize_function=sanitize_input, format_function=None,
            invalid_msg=None, initial_input=None, trailing_newline=True):
-    # TODO DOC
+    """Prompt user for input
+
+    :param prompt_text: Text to display next to input area
+    :param *extended_description: (Optional) Explanation of prompt. Printed
+        before prompt. Each positional parameter here is printed on its own
+        line
+
+    :param default_val: (Optional) Value to use if no input is provided
+    :param validate_function: (Default: validate_nonempty) Function used to
+        validate input
+    :param sanitize_function: (Default: sanitize_input) Function to sanitize
+        input
+    :param format_function: (Optional) Function to format input after running
+        it through sanitize_function and before passing it to validate_function
+    :param invalid_msg: (Optional) Error message text to display if validation
+        fails
+    :param initial_input: (Optional) Initial input (e.g. something passed in
+        via command line args). If it passes validation, will use this and skip
+        the input prompt
+    :param trailing_newline: (Default: True) Print a newline after successfully
+        getting input
+
+    :return: Input after sanitization, formatting, and validation
+    """
     # If input for this prompt was given via an argument, attempt to validate
     # it and bypass prompt
     if initial_input is not None:
