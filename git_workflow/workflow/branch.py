@@ -103,7 +103,6 @@ class Branch(WorkflowBase):
         branch_name = args['client'] + args['description'] + args['timestamp'] + args['initials']
         # TODO check for bad branch names if configured
         # TODO pass configs and args:
+        # TODO print output based on verbosity
         new_branch = self.create_branch(branch_name)
-        # TODO DEBUG
-        print(new_branch)
 
