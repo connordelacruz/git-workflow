@@ -8,7 +8,6 @@ from .base import WorkflowBase
 
 class Branch(WorkflowBase):
     """Create a new branch."""
-    # TODO DOCUMENT SCRIPT ABOVE
 
     def format_branch_name(self, val):
         """Convert text to lowercase and replace spaces and underscores with
@@ -53,38 +52,38 @@ class Branch(WorkflowBase):
             client, description, initials, timestamp
         """
         args = {}
-        # TODO if not args.no_client: else: client = ''
-        arg_client = None # TODO see if any values were passed in args
-        client = cmd.prompt(
-            'Client',
-            '(Optional) Enter the name of the affected client.',
-            initial_input=arg_client,
-            validate_function=cmd.validate_optional_prompt,
-            format_function=self.format_branch_name,
-        )
+        client = None
+        if not self.args.no_client:
+            client = cmd.prompt(
+                'Client',
+                '(Optional) Enter the name of the affected client.',
+                initial_input=self.args.client,
+                validate_function=cmd.validate_optional_prompt,
+                format_function=self.format_branch_name,
+            )
+        # Append hyphen if client is not empty
         if client:
             client += '-'
         else:
             client = ''
         args['client'] = client
 
-        arg_description = None # TODO args.description
         description = cmd.prompt(
             'Description',
             'Enter a brief description for the branch.',
             invalid_msg='Description must not be blank.',
-            initial_input=arg_description,
+            initial_input=self.args.description,
             format_function=self.format_branch_name,
         )
         description += '-'
         args['description'] = description
 
-        arg_initials = None # TODO arg.initials or config.initials, print info if configured
+        # TODO  or config.initials, print info if configured
         initials = cmd.prompt(
             'Initials',
             'Enter your initials.',
             invalid_msg='Must enter initials.',
-            initial_input=arg_initials,
+            initial_input=self.args.initials,
             format_function=self.format_branch_name,
         )
         args['initials'] = initials
@@ -100,10 +99,28 @@ class Branch(WorkflowBase):
     @classmethod
     def add_subparser(cls, subparsers, generic_parent_parser):
         branch_description = 'Create a new branch.'
-        branch_subparser = subparsers.add_parser('branch',
-                                                 description=branch_description, help=branch_description,
-                                                 parents=[generic_parent_parser], add_help=False)
-        # TODO: args
+        branch_subparser = subparsers.add_parser(
+            'branch', description=branch_description, help=branch_description,
+            parents=[generic_parent_parser], add_help=False
+        )
+        # Branch Name
+        branch_name_args = branch_subparser.add_argument_group('Branch Name Arguments')
+        client_group = branch_name_args.add_mutually_exclusive_group()
+        client_group.add_argument(
+            '--client', '-c', metavar='<client>', help='Specify client name'
+        )
+        client_group.add_argument(
+            '--no-client', '-C', help='No client name (skips prompt)',
+            action='store_true', default=False
+        )
+        branch_name_args.add_argument(
+            '--description', '-d', metavar='<description>', help='Specify branch description'
+        )
+        # TODO --timestamp
+        branch_name_args.add_argument(
+            '--initials', '-i', metavar='<initials>', help='Specify developer initials'
+        )
+
 
     def run(self):
         args = self.get_args()
@@ -111,5 +128,6 @@ class Branch(WorkflowBase):
         # TODO check for bad branch names if configured
         # TODO pass configs and args:
         # TODO print output based on verbosity
+        # TODO error handling
         new_branch = self.create_branch(branch_name)
 
