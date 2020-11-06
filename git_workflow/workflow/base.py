@@ -32,6 +32,12 @@ class WorkflowBase(ABC):
         if self.verbosity >= required_verbosity:
             cmd.print_multiline(*lines, formatting=formatting)
 
+    @property
+    @abstractmethod
+    def command():
+        """Subcommand name"""
+        pass
+
     @classmethod
     @abstractmethod
     def add_subparser(cls, subparsers, generic_parent_parser):

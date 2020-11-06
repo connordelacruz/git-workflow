@@ -9,6 +9,8 @@ from .base import WorkflowBase
 class Branch(WorkflowBase):
     """Create a new branch."""
 
+    command = 'branch'
+
     def format_branch_name(self, val):
         """Convert text to lowercase and replace spaces and underscores with
         hyphens.
@@ -39,11 +41,19 @@ class Branch(WorkflowBase):
             base.checkout()
         # Update
         if update_base_branch and base.tracking_branch():
+            self.print('Pulling updates to {}...'.format(base_branch))
             remote_name = base.tracking_branch().remote_name
             remote = Remote(self.repo, remote_name)
             fetch_info = remote.pull()
         # Checkout new branch
-        return base.checkout(b=branch_name)
+        self.print('Creating new branch {}...'.format(branch_name))
+        # TODO try/except:
+        new_active_branch = base.checkout(b=branch_name)
+        if new_active_branch.name == branch_name:
+            self.print('Branch created.', formatting=cmd.SUCCESS)
+        else:
+            pass # TODO should we get here if we wrap the above in try/except?
+        return new_active_branch
 
     def get_args(self):
         """Parse command line arguments and prompt for any missing values.
@@ -100,7 +110,7 @@ class Branch(WorkflowBase):
     def add_subparser(cls, subparsers, generic_parent_parser):
         branch_description = 'Create a new branch.'
         branch_subparser = subparsers.add_parser(
-            'branch', description=branch_description, help=branch_description,
+            cls.command, description=branch_description, help=branch_description,
             parents=[generic_parent_parser], add_help=False
         )
         # Branch Name

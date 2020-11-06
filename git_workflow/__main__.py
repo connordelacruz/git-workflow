@@ -32,14 +32,10 @@ def main():
             return
     # Is the minimum git version met for advanced features?
     min_git_version_met = utils.repo.verify_git_version()
-
     # Argument Parser
     parser = get_parser()
-    args = parser.parse_args()
-
-    # TODO Subcommand argument parsing
-    command = workflow.Branch(repo, min_git_version_met, args)
-    command.run()
+    # TODO exit code and try/except
+    exit_code = workflow.run_command(repo, min_git_version_met, parser)
 
 
 if __name__ == '__main__':
