@@ -97,6 +97,13 @@ class Branch(WorkflowBase):
 
         return args
 
+    @classmethod
+    def add_subparser(cls, subparsers, generic_parent_parser):
+        branch_description = 'Create a new branch.'
+        branch_subparser = subparsers.add_parser('branch',
+                                                 description=branch_description, help=branch_description,
+                                                 parents=[generic_parent_parser], add_help=False)
+        # TODO: args
 
     def run(self):
         args = self.get_args()

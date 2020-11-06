@@ -11,7 +11,10 @@ def get_parser():
     generic_parent_parser = utils.argparse.get_generic_parent_parser()
     parser = argparse.ArgumentParser(parents=[generic_parent_parser],
                                      add_help=False)
-    # TODO Add subparsers for each workflow command
+    subparsers = parser.add_subparsers(title='Commands',
+                                       description="Run '{} <command> --help' for details".format(parser.prog),
+                                       dest='command', metavar='<command>')
+    workflow.Branch.add_subparser(subparsers, generic_parent_parser)
     return parser
 
 
@@ -35,7 +38,7 @@ def main():
     args = parser.parse_args()
 
     # TODO Subcommand argument parsing
-    command = workflow.Branch(repo, min_git_version_met)
+    command = workflow.Branch(repo, min_git_version_met, args)
     command.run()
 
 
