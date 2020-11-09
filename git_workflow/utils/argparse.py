@@ -23,7 +23,7 @@ def get_generic_parent_parser():
     group.add_argument('-V', '--version', action='version',
                        version='%(prog)s ' + __version__,
                        help='Show version number and exit')
-    # TODO: Figure out best way to do this:
+    # TODO: Implement verbose
     # group.add_argument('-v', '--verbose', type=int, choices=range(0,3),
     #                    nargs='?', default=1, const=2,
     #                    help='Set verbosity level')

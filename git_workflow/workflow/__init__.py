@@ -24,6 +24,6 @@ def run_command(repo, min_git_version_met, parser):
         parser.print_help()
     else:
         command = command_class(repo, min_git_version_met, args)
-        command.run() # TODO return exit_code
+        command.run() # TODO return exit_code? Or just raise exception?
     return exit_code
 
