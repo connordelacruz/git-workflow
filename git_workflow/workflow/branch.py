@@ -22,7 +22,6 @@ class Branch(WorkflowBase):
         return re.sub('[ _]+', '-', val.lower())
 
     # TODO use configs and update default docs
-    # TODO self.print output
     def create_branch(self, branch_name, base_branch='master',
                       update_base_branch=True):
         """Create a new branch.
@@ -44,7 +43,7 @@ class Branch(WorkflowBase):
             self.print('Pulling updates to {}...'.format(base_branch))
             remote_name = base.tracking_branch().remote_name
             remote = Remote(self.repo, remote_name)
-            fetch_info = remote.pull()
+            fetch_info = remote.pull() # TODO print if verbose? There's a lot of stuff in here that may not be relevant
         # Checkout new branch
         self.print('Creating new branch {}...'.format(branch_name))
         # TODO try/except:
@@ -100,7 +99,6 @@ class Branch(WorkflowBase):
 
         # TODO TICKET #
 
-        # TODO allow arg override
         timestamp = datetime.datetime.now().strftime('%Y%m%d-')
         args['timestamp'] = timestamp
 
