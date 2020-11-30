@@ -43,7 +43,16 @@ class Branch(WorkflowBase):
             self.print('Pulling updates to {}...'.format(base_branch))
             remote_name = base.tracking_branch().remote_name
             remote = Remote(self.repo, remote_name)
-            fetch_info = remote.pull() # TODO print if verbose? There's a lot of stuff in here that may not be relevant
+            # TODO see RemoteProgress and implement?
+            # https://gitpython.readthedocs.io/en/stable/tutorial.html#tutorial-label
+            base_commit = base.commit
+            for fetch_info in remote.pull():
+                if fetch_info.ref == base.tracking_branch():
+                    if fetch_info.commit != base_commit:
+                        self.print('Updated {} to {}'.format(base_branch, fetch_info.commit.hexsha))
+                    else:
+                        self.print('{} already up to date.'.format(base_branch))
+            self.print('')
         # Checkout new branch
         self.print('Creating new branch {}...'.format(branch_name))
         # TODO try/except:
@@ -128,7 +137,6 @@ class Branch(WorkflowBase):
         branch_name_args.add_argument(
             '--initials', '-i', metavar='<initials>', help='Specify developer initials'
         )
-
 
     def run(self):
         args = self.get_args()

@@ -23,10 +23,10 @@ class WorkflowBase(ABC):
     def print(self, *lines, required_verbosity=1, formatting=None):
         """Print a message.
 
-        :param *lines: Lines to print
+        :param lines: Lines to print
         :param required_verbosity: (Default: 1) Only print if verbosity is greater than
             or equal to this value
-        :param fmt: (Optional) Set to a formatting constant from utils.cmd to
+        :param formatting: (Optional) Set to a formatting constant from utils.cmd to
             format output
         """
         if self.verbosity >= required_verbosity:
