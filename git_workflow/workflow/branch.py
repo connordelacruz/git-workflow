@@ -6,9 +6,9 @@ from git import Head, Remote
 from git_workflow.utils import cmd
 from .base import WorkflowBase
 
+
 class Branch(WorkflowBase):
     """Create a new branch."""
-
     command = 'branch'
 
     def format_branch_name(self, val):
@@ -66,7 +66,7 @@ class Branch(WorkflowBase):
     def get_args(self):
         """Parse command line arguments and prompt for any missing values.
 
-        :return: A dicionary with the following keys:
+        :return: A dictionary with the following keys:
             client, description, initials, timestamp
         """
         args = {}

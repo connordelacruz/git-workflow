@@ -14,7 +14,7 @@ def get_parser():
     subparsers = parser.add_subparsers(title='Commands',
                                        description="Run '{} <command> --help' for details".format(parser.prog),
                                        dest='command', metavar='<command>')
-    workflow.Branch.add_subparser(subparsers, generic_parent_parser)
+    workflow.add_command_subparsers(subparsers, generic_parent_parser)
     return parser
 
 
