@@ -1,4 +1,4 @@
-from git_workflow.utils import cmd
+from git_workflow.utils import cmd, initialize
 from .base import WorkflowBase
 
 
@@ -40,5 +40,6 @@ class CommitTemplate(WorkflowBase):
 
     def run(self):
         args = self.get_args()
-        # TODO self.render_template()
-        # TODO self.configure_template()
+        initialize.initialize_repo(self.repo)
+        # TODO Create template file
+        # TODO Configure the template
