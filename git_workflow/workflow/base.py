@@ -1,6 +1,5 @@
 """Base class for workflow scripts."""
 from abc import ABC, abstractmethod
-
 from git_workflow.utils import cmd
 
 
@@ -36,6 +35,12 @@ class WorkflowBase(ABC):
     @abstractmethod
     def command():
         """Subcommand name"""
+        pass
+
+    @property
+    @abstractmethod
+    def description():
+        """Subcommand description"""
         pass
 
     @classmethod
