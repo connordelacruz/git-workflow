@@ -1,8 +1,6 @@
 import datetime
 import re
-
 from git import Head, Remote
-
 from git_workflow.utils import cmd
 from .base import WorkflowBase
 

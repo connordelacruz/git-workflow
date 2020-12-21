@@ -1,6 +1,16 @@
-"""Tools for initializing a repo to work with workflow scripts."""
+"""Utilities for common interactions with git repo."""
 import os
-from git.exc import GitCommandError
+from git import GitCommandError
+from git.cmd import Git as GitCmd
+from git_workflow.__about__ import __min_git_version__
+
+
+def verify_git_version():
+    """Returns True if minimum git version is met for advanced features"""
+    g = GitCmd()
+    major, minor, patch = g.version_info
+    version_float = float('{}.{}'.format(major, minor))
+    return version_float >= __min_git_version__
 
 
 def get_workflow_config_path(repo):
@@ -43,8 +53,7 @@ def include_config_workflow(repo):
     return verify_workflow_config_include(repo)
 
 
-# TODO handle printing/verbosity
-def initialize_repo(repo):
+def initialize(repo):
     """Initialize the repo for use with workflow scripts (unless already
     initialized).
 
@@ -69,5 +78,3 @@ def initialize_repo(repo):
             pass # TODO ERROR
     # TODO don't bother returning once exceptions are implemented
     return workflow_config_file_exists and workflow_config_included
-
-
