@@ -5,6 +5,8 @@ from git.cmd import Git as GitCmd
 from git_workflow.__about__ import __min_git_version__
 
 
+# Verify git and repo
+
 def verify_git_version():
     """Returns True if minimum git version is met for advanced features"""
     g = GitCmd()
@@ -33,6 +35,8 @@ def verify_workflow_config_include(repo):
         pass
     return result
 
+
+# Initialize
 
 def create_workflow_config_file(repo):
     """Create config_workflow and configure workflow.configpath.
