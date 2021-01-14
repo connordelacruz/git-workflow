@@ -24,10 +24,14 @@ class Configs:
         self.BASE_BRANCH = self.get_config('workflow.baseBranch', 'master')
 
         # Commit Templates -----------------------------------------------------
-        # TODO workflow.enableCommitTemplate?
-        #: Format of commit template body. Placeholders:
+        #: Format of commit template body. Supports the following placeholders:
         #:   {ticket} - Replaced with ticket number
+        #:   {branch} - Replaced with branch name
+        #:   {initials} - Replaced with branch name
         self.COMMIT_TEMPLATE_FORMAT = self.get_config('workflow.commitTemplateFormat', '[{ticket}] ')
+        # TODO: Doc and implement; always prepend .gitmessage_local_
+        self.COMMIT_TEMPLATE_FILENAME_FORMAT = self.get_config('workflow.commitTemplateFilenameFormat',
+                                                               '.gitmessage_local_{ticket}_{branch}')
 
         # Ticket Numbers -------------------------------------------------------
         # TODO: TICKET_INPUT_FORMAT_REGEX and TICKET_FORMAT_CAPITALIZE

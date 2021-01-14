@@ -39,21 +39,22 @@ class CommitTemplate(WorkflowBase):
 
         return args
 
-    def render_commit_template_body(self, args, configs, branch_name):
-        """Returns the rendered template body using the configured format.
+    def get_format_kwargs(self, args, configs, branch_name):
+        """Returns a dict mapping placeholders to their respective values.
 
         :param args: get_args() result
         :param configs: Configs instance
         :param branch_name: Name of the branch to create template for
 
-        :return: Template body text
+        :return: Dictionary to pass as kwargs to .format()
         """
-        # TODO: support more substitutions
-        format_args = {
+        # TODO: client?
+        format_kwargs = {
             'ticket': args['ticket'],
+            'branch': branch_name,
+            'initials': configs.INITIALS or '',
         }
-        commit_template_body = configs.COMMIT_TEMPLATE_FORMAT.format(**format_args)
-        return commit_template_body
+        return format_kwargs
 
     def create_template(self, args, configs, repo_root_dir, branch_name):
         """Create git commit template file.
@@ -65,12 +66,16 @@ class CommitTemplate(WorkflowBase):
 
         :return: Filename of the created template file
         """
-        # TODO configurable filename format; make sure does not conflict with existing file?
-        commit_template_file = files.sanitize_filename(f'.gitmessage_local_{args["ticket"]}_{branch_name}')
+        format_kwargs = self.get_format_kwargs(args, configs, branch_name)
+        # TODO make sure does not conflict with existing file?
+        commit_template_file = files.sanitize_filename(
+            configs.COMMIT_TEMPLATE_FILENAME_FORMAT.format(**format_kwargs)
+        )
         commit_template_path = os.path.join(repo_root_dir, commit_template_file)
         self.print('Creating commit template file...')
+        commit_template_body = configs.COMMIT_TEMPLATE_FORMAT.format(**format_kwargs)
         with open(commit_template_path, 'w') as f:
-            f.write(self.render_commit_template_body(args, configs, branch_name))
+            f.write(commit_template_body)
         # TODO VERIFY COMMIT TEMPLATE
         self.print('Template file created:', commit_template_path, formatting=cmd.SUCCESS)
         return commit_template_file
