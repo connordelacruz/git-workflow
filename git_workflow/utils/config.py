@@ -14,12 +14,23 @@ class Configs:
         # Internal -------------------------------------------------------------
         #: Path to workflow config
         self.CONFIG_PATH = self.get_config('workflow.configpath')
+
         # User Details ---------------------------------------------------------
         #: User initials
         self.INITIALS = self.get_config('workflow.initials')
+
         # Branches -------------------------------------------------------------
         #: Base branch (Default: master)
         self.BASE_BRANCH = self.get_config('workflow.baseBranch', 'master')
+
+        # Commit Templates -----------------------------------------------------
+        # TODO workflow.enableCommitTemplate?
+        #: Format of commit template body. Placeholders:
+        #:   {ticket} - Replaced with ticket number
+        self.COMMIT_TEMPLATE_FORMAT = self.get_config('workflow.commitTemplateFormat', '[{ticket}] ')
+
+        # Ticket Numbers -------------------------------------------------------
+        # TODO: TICKET_INPUT_FORMAT_REGEX and TICKET_FORMAT_CAPITALIZE
 
     def get_config(self, config, default=None):
         value = default

@@ -40,9 +40,19 @@ class CommitTemplate(WorkflowBase):
         return args
 
     def render_commit_template_body(self, args, configs, branch_name):
-        # TODO DOC
-        # TODO USE CONFIGURED TEMPLATE FORMAT!
-        commit_template_body = '[{ticket}] '.format(ticket=args['ticket'])
+        """Returns the rendered template body using the configured format.
+
+        :param args: get_args() result
+        :param configs: Configs instance
+        :param branch_name: Name of the branch to create template for
+
+        :return: Template body text
+        """
+        # TODO: support more substitutions
+        format_args = {
+            'ticket': args['ticket'],
+        }
+        commit_template_body = configs.COMMIT_TEMPLATE_FORMAT.format(**format_args)
         return commit_template_body
 
     def create_template(self, args, configs, repo_root_dir, branch_name):
