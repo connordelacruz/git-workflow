@@ -71,6 +71,7 @@ def initialize(repo):
         workflow_config_file_exists = create_workflow_config_file(repo)
         if workflow_config_file_exists:
             print('Config created.')
+            print('')
         else:
             pass # TODO ERROR
     if not workflow_config_included:
@@ -78,6 +79,7 @@ def initialize(repo):
         workflow_config_included = include_config_workflow(repo)
         if workflow_config_included:
             print('Repo configured.')
+            print('')
         else:
             pass # TODO ERROR
     # TODO don't bother returning once exceptions are implemented

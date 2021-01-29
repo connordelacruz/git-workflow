@@ -1,5 +1,6 @@
 """Command line formatting, prompts, and other utilities."""
 
+import re
 from blessings import Terminal
 
 # Globals
@@ -92,6 +93,20 @@ def validate_nonempty(val, error_msg=None):
     if not val:
         raise ValidationError(error_msg or 'Please enter some text.')
     return val
+
+
+def generate_validate_regex_function(expr, default_error_msg='No matches found.', show_expr_in_error_msg=True):
+    # TODO DOC
+    def validate_regex(val, error_msg=None):
+        if not error_msg:
+            error_msg = default_error_msg
+        if show_expr_in_error_msg:
+            error_msg += '\n' + INDENT + 'Must match regex: ' + expr
+        res = re.findall(expr, val)
+        if not res:
+            raise ValidationError(error_msg)
+        return res[0]
+    return validate_regex
 
 
 def prompt(prompt_text, *extended_description,

@@ -1,6 +1,7 @@
 """Base class for workflow scripts."""
 from abc import ABC, abstractmethod
 from git_workflow.utils import cmd
+from git_workflow.utils.config import Configs
 
 
 class WorkflowBase(ABC):
@@ -18,6 +19,7 @@ class WorkflowBase(ABC):
         self.min_git_version_met = min_git_version_met
         self.args = args
         self.verbosity = verbosity
+        self.configs = Configs(self.repo)
 
     def print(self, *lines, required_verbosity=1, formatting=None):
         """Print a message.
