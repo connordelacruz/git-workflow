@@ -29,9 +29,11 @@ class Configs:
         #:   {branch} - Replaced with branch name
         #:   {initials} - Replaced with branch name
         self.COMMIT_TEMPLATE_FORMAT = self.get_config('workflow.commitTemplateFormat', '[{ticket}] ')
-        # TODO: Doc and implement; always prepend .gitmessage_local_
+        #: Format of commit template filenames. Supports same placeholders as
+        #: workflow.commitTemplateFormat.
+        #: NOTE: Resulting filenames will always begin with '.gitmessage_local_'.
         self.COMMIT_TEMPLATE_FILENAME_FORMAT = self.get_config('workflow.commitTemplateFilenameFormat',
-                                                               '.gitmessage_local_{ticket}_{branch}')
+                                                               '{ticket}_{branch}')
 
         # Ticket Numbers -------------------------------------------------------
         # TODO: TICKET_INPUT_FORMAT_REGEX and TICKET_FORMAT_CAPITALIZE

@@ -67,10 +67,11 @@ class CommitTemplate(WorkflowBase):
         :return: Filename of the created template file
         """
         format_kwargs = self.get_format_kwargs(args, configs, branch_name)
-        # TODO make sure does not conflict with existing file?
+        # NOTE: filenames will always begin with '.gitmessage_local_'
         commit_template_file = files.sanitize_filename(
-            configs.COMMIT_TEMPLATE_FILENAME_FORMAT.format(**format_kwargs)
+            '.gitmessage_local_' + configs.COMMIT_TEMPLATE_FILENAME_FORMAT.format(**format_kwargs)
         )
+        # TODO make sure does not conflict with existing file; append hex or something if it does and print info
         commit_template_path = os.path.join(repo_root_dir, commit_template_file)
         self.print('Creating commit template file...')
         commit_template_body = configs.COMMIT_TEMPLATE_FORMAT.format(**format_kwargs)
@@ -89,7 +90,7 @@ class CommitTemplate(WorkflowBase):
         :param branch_name: Name of the branch
         :param commit_template_file: Commit template filename
         """
-        # TODO rephrase output?
+        # TODO REPHRASE OUTPUT. Current output would be fine for --verbose but is too much otherwise
         branch_config_file = files.sanitize_filename(f'config_{branch_name}')
         branch_config_path = os.path.join(self.repo.git_dir, branch_config_file)
         self.print(f'Configuring commit.template for {branch_name}...')
