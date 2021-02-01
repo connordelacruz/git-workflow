@@ -96,7 +96,16 @@ def validate_nonempty(val, error_msg=None):
 
 
 def generate_validate_regex_function(expr, default_error_msg='No matches found.', show_expr_in_error_msg=True):
-    # TODO DOC
+    """Generate a validation function that validates a given regular expression.
+
+    :param expr: Regular expression to validate against
+    :param default_error_msg: (Optional) Default validation error message to use
+        in this validation function
+    :param show_expr_in_error_msg: (Default: True) If True, expr will be shown
+        in error message
+
+    :return: Generated validation function
+    """
     def validate_regex(val, error_msg=None):
         if not error_msg:
             error_msg = default_error_msg

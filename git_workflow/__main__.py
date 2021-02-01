@@ -1,5 +1,6 @@
 import argparse
 import os
+import sys
 from git import Repo
 from git.exc import InvalidGitRepositoryError, NoSuchPathError
 from git_workflow import utils, workflow
@@ -34,7 +35,11 @@ def main():
     # Argument Parser
     parser = get_parser()
     # TODO exit code and try/except
-    exit_code = workflow.run_command(repo, min_git_version_met, parser)
+    try:
+        exit_code = workflow.run_command(repo, min_git_version_met, parser)
+    except KeyboardInterrupt:
+        print('')
+        sys.exit(0)
 
 
 if __name__ == '__main__':

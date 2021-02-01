@@ -37,11 +37,22 @@ class CommitTemplate(WorkflowBase):
             invalid_msg='Invalid ticket number formatting.',
             initial_input=self.args.ticket,
             validate_function=validate_ticket_number,
-            # TODO custom format_function
+            format_function=self.format_ticket_number,
         )
         args['ticket'] = ticket
 
         return args
+
+    def format_ticket_number(self, val):
+        """Format ticket number input based on configs.
+
+        :param val: Text to format
+
+        :return: formatted text
+        """
+        if self.configs.TICKET_FORMAT_CAPITALIZE:
+            val = val.upper()
+        return val
 
     def get_format_kwargs(self, args, branch_name):
         """Returns a dict mapping placeholders to their respective values.
