@@ -34,6 +34,16 @@ class Branch(WorkflowBase):
             '--initials', '-i', metavar='<initials>', help='Specify developer initials'
         )
 
+    def run(self):
+        args = self.get_args()
+        branch_name = args['client'] + args['description'] + args['timestamp'] + args['initials']
+        # TODO check for bad branch names if configured
+        # TODO pass configs and args:
+        new_branch = self.create_branch(branch_name)
+        # TODO If specified, call commit-template
+        if args['ticket']:
+            pass
+
     def get_args(self):
         """Parse command line arguments and prompt for any missing values.
 
@@ -42,11 +52,11 @@ class Branch(WorkflowBase):
         """
         args = {}
         client = None
-        if not self.args.no_client:
+        if not self.parsed_args.no_client:
             client = cmd.prompt(
                 'Client',
                 '(Optional) Enter the name of the affected client.',
-                initial_input=self.args.client,
+                initial_input=self.parsed_args.client,
                 validate_function=cmd.validate_optional_prompt,
                 format_function=self.format_branch_name,
             )
@@ -61,7 +71,7 @@ class Branch(WorkflowBase):
             'Description',
             'Enter a brief description for the branch.',
             invalid_msg='Description must not be blank.',
-            initial_input=self.args.description,
+            initial_input=self.parsed_args.description,
             format_function=self.format_branch_name,
         )
         description += '-'
@@ -72,12 +82,20 @@ class Branch(WorkflowBase):
             'Initials',
             'Enter your initials.',
             invalid_msg='Must enter initials.',
-            initial_input=self.args.initials,
+            initial_input=self.parsed_args.initials,
             format_function=self.format_branch_name,
         )
         args['initials'] = initials
 
-        # TODO TICKET #
+        # TODO Skip if disabled or -S
+        ticket = cmd.prompt(
+            'Ticket Number',
+            '(Optional) Enter ticket number to use in commit messages.',
+            "Leave blank if you don't want to use a commit template.",
+            # TODO initial_input
+            validate_function=cmd.validate_optional_prompt,
+        )
+        args['ticket'] = ticket
 
         timestamp = datetime.datetime.now().strftime('%Y%m%d-')
         args['timestamp'] = timestamp
@@ -135,13 +153,4 @@ class Branch(WorkflowBase):
         else:
             pass # TODO should we get here if we wrap the above in try/except?
         return new_active_branch
-
-    def run(self):
-        args = self.get_args()
-        branch_name = args['client'] + args['description'] + args['timestamp'] + args['initials']
-        # TODO check for bad branch names if configured
-        # TODO pass configs and args:
-        # TODO print output based on verbosity
-        # TODO error handling
-        new_branch = self.create_branch(branch_name)
 

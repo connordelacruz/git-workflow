@@ -20,6 +20,16 @@ class CommitTemplate(WorkflowBase):
             default=None
         )
 
+    def run(self):
+        # TODO check self.min_git_version_met
+        args = self.get_args()
+        repo_root_dir = os.path.dirname(self.repo.git_dir)
+        branch_name = self.repo.active_branch.name
+        # Create and configure the commit template
+        commit_template_file = self.create_template(args, repo_root_dir, branch_name)
+        self.configure_template(branch_name, commit_template_file)
+
+    # TODO extract prompt stuff to class method so Branch can use it
     def get_args(self):
         """Parse command line arguments and prompt for any missing values.
 
@@ -35,7 +45,7 @@ class CommitTemplate(WorkflowBase):
             'Ticket',
             'Enter ticket number to use in commit messages.',
             invalid_msg='Invalid ticket number formatting.',
-            initial_input=self.args.ticket,
+            initial_input=self.parsed_args.ticket,
             validate_function=validate_ticket_number,
             format_function=self.format_ticket_number,
         )
@@ -115,11 +125,3 @@ class CommitTemplate(WorkflowBase):
                    f'when branch {branch_name} is checked out.',
                    formatting=cmd.SUCCESS)
 
-    def run(self):
-        # TODO check self.min_git_version_met
-        args = self.get_args()
-        repo_root_dir = os.path.dirname(self.repo.git_dir)
-        branch_name = self.repo.active_branch.name
-        # Create and configure the commit template
-        commit_template_file = self.create_template(args, repo_root_dir, branch_name)
-        self.configure_template(branch_name, commit_template_file)

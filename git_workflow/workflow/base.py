@@ -6,18 +6,20 @@ from git_workflow.utils.config import Configs
 
 class WorkflowBase(ABC):
 
-    def __init__(self, repo, min_git_version_met, args, verbosity=1):
+    # TODO let self.parsed_args be None if not invoked from command line
+    # TODO self.args_inputs; populated by a method based on if parsed_args is set or not; optional args_inputs param
+    def __init__(self, repo, min_git_version_met, parsed_args, verbosity=1):
         """Constructor
 
         :param repo: git.Repo instance for the repository
         :param min_git_version_met: True if installed version of git meets
             minimum requirement for advanced features
-        :param args: Parsed args
+        :param parsed_args: Parsed args
         :param verbosity: (Default: 1) Output verbosity level
         """
         self.repo = repo
         self.min_git_version_met = min_git_version_met
-        self.args = args
+        self.parsed_args = parsed_args
         self.verbosity = verbosity
         self.configs = Configs(self.repo)
 
