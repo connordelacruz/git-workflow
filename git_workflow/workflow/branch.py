@@ -3,6 +3,7 @@ import re
 from git import Head, Remote
 from git_workflow.utils import cmd
 from .base import WorkflowBase
+from .commit_template import CommitTemplate
 
 
 class Branch(WorkflowBase):
@@ -40,9 +41,13 @@ class Branch(WorkflowBase):
         # TODO check for bad branch names if configured
         # TODO pass configs and args:
         new_branch = self.create_branch(branch_name)
-        # TODO If specified, call commit-template
+        # If specified, call commit-template
         if args['ticket']:
-            pass
+            self.print('', 'Checking ticket number format...')
+            commit_template_parsed_args = self.parser.parse_args([CommitTemplate.command, args['ticket']])
+            commit_template = CommitTemplate(self.repo, self.parser, parsed_args=commit_template_parsed_args,
+                                             verbosity=self.verbosity)
+            commit_template.run()
 
     def get_args(self):
         """Parse command line arguments and prompt for any missing values.

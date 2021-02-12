@@ -28,7 +28,6 @@ class CommitTemplate(WorkflowBase):
         commit_template_file = self.create_template(args, repo_root_dir, branch_name)
         self.configure_template(branch_name, commit_template_file)
 
-    # TODO extract prompt stuff to class method so Branch can use it
     def get_args(self):
         """Parse command line arguments and prompt for any missing values.
 
