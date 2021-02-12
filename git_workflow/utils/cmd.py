@@ -119,9 +119,9 @@ def generate_validate_regex_function(expr, default_error_msg='No matches found.'
 
 
 def prompt(prompt_text, *extended_description,
-           default_val=None, validate_function=validate_nonempty,
-           sanitize_function=sanitize_input, format_function=None,
-           invalid_msg=None, initial_input=None, trailing_newline=True):
+           initial_input=None, default_val=None,
+           sanitize_function=sanitize_input, validate_function=validate_nonempty, format_function=None,
+           invalid_msg=None, print_newline_on_success=True):
     """Prompt user for input
 
     :param prompt_text: Text to display next to input area
@@ -129,20 +129,22 @@ def prompt(prompt_text, *extended_description,
         before prompt. Each positional parameter here is printed on its own
         line
 
-    :param default_val: (Optional) Value to use if no input is provided
-    :param validate_function: (Default: validate_nonempty) Function used to
-        validate input
-    :param sanitize_function: (Default: sanitize_input) Function to sanitize
-        input
-    :param format_function: (Optional) Function to format input after running
-        it through sanitize_function and before passing it to validate_function
-    :param invalid_msg: (Optional) Error message text to display if validation
-        fails
     :param initial_input: (Optional) Initial input (e.g. something passed in
         via command line args). If it passes validation, will use this and skip
         the input prompt
-    :param trailing_newline: (Default: True) Print a newline after successfully
-        getting input
+    :param default_val: (Optional) Value to use if no input is provided
+
+    :param sanitize_function: (Default: sanitize_input) Function to sanitize
+        input
+    :param validate_function: (Default: validate_nonempty) Function used to
+        validate input
+    :param format_function: (Optional) Function to format input after running
+        it through sanitize_function and before passing it to validate_function
+
+    :param invalid_msg: (Optional) Error message text to display if validation
+        fails
+    :param print_newline_on_success: (Default: True) Print a newline after
+        successfully getting valid input
 
     :return: Input after sanitization, formatting, and validation
     """
@@ -158,26 +160,31 @@ def prompt(prompt_text, *extended_description,
             print_error(e)
         else:
             return val
-
+    # Print description and prompt
     if extended_description:
         print(*extended_description, sep='\n')
     text = COLORS[PROMPT]('> ' + (
-        '{} [{}]'.format(prompt_text, default_val) if default_val is not None else prompt_text
+        '{} [{}]'.format(prompt_text, default_val)
+        if default_val is not None else
+        prompt_text
     ) + ': ')
-
+    # Loop until we get valid input
     while True:
         val = sanitize_function(input(text))
-        if default_val is not None and not val:
+        # If we have a default val, use it if input is empty
+        if not val and default_val is not None:
             val = default_val
+        # Format val
         if format_function is not None:
             val = format_function(val)
+        # Attempt to validate, loop if invalid
         try:
             val = validate_function(val, invalid_msg)
         except ValidationError as e:
             print_error(e)
             continue
         break
-    if trailing_newline:
+    if print_newline_on_success:
         print('')
     return val
 

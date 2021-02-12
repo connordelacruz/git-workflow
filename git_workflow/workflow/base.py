@@ -6,8 +6,6 @@ from git_workflow.utils.config import Configs
 
 class WorkflowBase(ABC):
 
-    # TODO define self.args? abstractmethod get_args()? (rename populate_args or something??)
-    # TODO verify that self.parsed_args can be None if not invoked from command line
     def __init__(self, repo, parser,
                  parsed_args=None, verbosity=1):
         """Constructor

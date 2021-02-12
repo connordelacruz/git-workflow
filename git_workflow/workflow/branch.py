@@ -11,6 +11,19 @@ class Branch(WorkflowBase):
     command = 'branch'
     description = 'Create a new branch.'
 
+    def run(self):
+        args = self.get_args()
+        branch_name = args['client'] + args['description'] + args['timestamp'] + args['initials']
+        # TODO check for bad branch names if configured
+        new_branch = self.create_branch(branch_name)
+        # If specified, call commit-template
+        if args['ticket']:
+            self.print('', 'Checking ticket number format...')
+            commit_template_parsed_args = self.parser.parse_args([CommitTemplate.command, args['ticket']])
+            commit_template = CommitTemplate(self.repo, self.parser, parsed_args=commit_template_parsed_args,
+                                             verbosity=self.verbosity)
+            commit_template.run()
+
     @classmethod
     def add_subparser(cls, subparsers, generic_parent_parser):
         branch_subparser = subparsers.add_parser(
@@ -21,33 +34,29 @@ class Branch(WorkflowBase):
         branch_name_args = branch_subparser.add_argument_group('Branch Name Arguments')
         client_group = branch_name_args.add_mutually_exclusive_group()
         client_group.add_argument(
-            '--client', '-c', metavar='<client>', help='Specify client name'
+            '-c', '--client', metavar='<client>', help='Specify client name'
         )
         client_group.add_argument(
-            '--no-client', '-C', help='No client name (skips prompt)',
+            '-C', '--no-client', help='No client name (skips prompt)',
             action='store_true', default=False
         )
         branch_name_args.add_argument(
-            '--description', '-d', metavar='<description>', help='Specify branch description'
+            '-d', '--description', metavar='<description>', help='Specify branch description'
         )
-        # TODO --timestamp
         branch_name_args.add_argument(
-            '--initials', '-i', metavar='<initials>', help='Specify developer initials'
+            '-i', '--initials', metavar='<initials>', help='Specify developer initials'
         )
-
-    def run(self):
-        args = self.get_args()
-        branch_name = args['client'] + args['description'] + args['timestamp'] + args['initials']
-        # TODO check for bad branch names if configured
-        # TODO pass configs and args:
-        new_branch = self.create_branch(branch_name)
-        # If specified, call commit-template
-        if args['ticket']:
-            self.print('', 'Checking ticket number format...')
-            commit_template_parsed_args = self.parser.parse_args([CommitTemplate.command, args['ticket']])
-            commit_template = CommitTemplate(self.repo, self.parser, parsed_args=commit_template_parsed_args,
-                                             verbosity=self.verbosity)
-            commit_template.run()
+        # Commit Template
+        commit_template_args = branch_subparser.add_argument_group('Commit Template Arguments')
+        ticket_group = commit_template_args.add_mutually_exclusive_group()
+        ticket_group.add_argument(
+            '-t', '--ticket', metavar='<ticket#>', help='Specify ticket number (will create commit template)'
+        )
+        ticket_group.add_argument(
+            '-T', '--no-ticket', help="Skip ticket number prompt, don't create commit template (overrides -t)",
+            action='store_true', default=False
+        ) # https://youtu.be/iHSPf6x1Fdo
+        # TODO --timestamp, other args
 
     def get_args(self):
         """Parse command line arguments and prompt for any missing values.
@@ -92,14 +101,16 @@ class Branch(WorkflowBase):
         )
         args['initials'] = initials
 
-        # TODO Skip if disabled or -S
-        ticket = cmd.prompt(
-            'Ticket Number',
-            '(Optional) Enter ticket number to use in commit messages.',
-            "Leave blank if you don't want to use a commit template.",
-            # TODO initial_input
-            validate_function=cmd.validate_optional_prompt,
-        )
+        # TODO use CommitTemplate validate method (only if the input isn't empty)
+        ticket = None
+        if not self.parsed_args.no_ticket:
+            ticket = cmd.prompt(
+                'Ticket Number',
+                '(Optional) Enter ticket number to use in commit messages.',
+                "Leave blank if you don't want to use a commit template.",
+                initial_input=self.parsed_args.ticket,
+                validate_function=cmd.validate_optional_prompt,
+            )
         args['ticket'] = ticket
 
         timestamp = datetime.datetime.now().strftime('%Y%m%d-')

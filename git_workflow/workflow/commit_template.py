@@ -9,6 +9,14 @@ class CommitTemplate(WorkflowBase):
     command = 'commit-template'
     description = 'Configure git commit template for a branch.'
 
+    def run(self):
+        args = self.get_args()
+        repo_root_dir = os.path.dirname(self.repo.git_dir)
+        branch_name = self.repo.active_branch.name
+        # Create and configure the commit template
+        commit_template_file = self.create_template(args, repo_root_dir, branch_name)
+        self.configure_template(branch_name, commit_template_file)
+
     @classmethod
     def add_subparser(cls, subparsers, generic_parent_parser):
         commit_template_subparser = subparsers.add_parser(
@@ -19,14 +27,6 @@ class CommitTemplate(WorkflowBase):
             'ticket', metavar='<ticket>', nargs='?', help='Ticket number to use in commit template',
             default=None
         )
-
-    def run(self):
-        args = self.get_args()
-        repo_root_dir = os.path.dirname(self.repo.git_dir)
-        branch_name = self.repo.active_branch.name
-        # Create and configure the commit template
-        commit_template_file = self.create_template(args, repo_root_dir, branch_name)
-        self.configure_template(branch_name, commit_template_file)
 
     def get_args(self):
         """Parse command line arguments and prompt for any missing values.
@@ -40,7 +40,7 @@ class CommitTemplate(WorkflowBase):
             self.configs.TICKET_INPUT_FORMAT_REGEX
         )
         ticket = cmd.prompt(
-            'Ticket',
+            'Ticket Number',
             'Enter ticket number to use in commit messages.',
             invalid_msg='Invalid ticket number formatting.',
             initial_input=self.parsed_args.ticket,
