@@ -21,7 +21,6 @@ class CommitTemplate(WorkflowBase):
         )
 
     def run(self):
-        # TODO check self.min_git_version_met
         args = self.get_args()
         repo_root_dir = os.path.dirname(self.repo.git_dir)
         branch_name = self.repo.active_branch.name

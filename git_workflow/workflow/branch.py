@@ -134,8 +134,6 @@ class Branch(WorkflowBase):
             self.print('Pulling updates to {}...'.format(base_branch))
             remote_name = base.tracking_branch().remote_name
             remote = Remote(self.repo, remote_name)
-            # TODO see RemoteProgress and implement?
-            # https://gitpython.readthedocs.io/en/stable/tutorial.html#tutorial-label
             base_commit = base.commit
             for fetch_info in remote.pull():
                 if fetch_info.ref == base.tracking_branch():

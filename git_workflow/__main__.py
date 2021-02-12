@@ -19,24 +19,29 @@ def get_parser():
 
 
 def main():
+    # Check installed git version
+    # TODO allow limited functionality for lower git versions in future update?
+    try:
+        min_git_version_met = utils.repository.verify_git_version()
+    except Exception as e:
+        utils.cmd.print_error(e)
+        return
     # Initialize Repo object
     repo = None
     try:
         repo = Repo(os.getcwd(), search_parent_directories=True)
     except InvalidGitRepositoryError as e:
-        print('No git repo found: {}'.format(e))
+        utils.cmd.print_error('No git repo found: {}'.format(e))
     except NoSuchPathError as e:
-        print('Invalid path: {}'.format(e))
+        utils.cmd.print_error('Invalid path: {}'.format(e))
     finally:
         if repo is None:
             return
-    # Is the minimum git version met for advanced features?
-    min_git_version_met = utils.repository.verify_git_version()
     # Argument Parser
     parser = get_parser()
     # TODO exit code and try/except
     try:
-        exit_code = workflow.run_command(repo, min_git_version_met, parser)
+        exit_code = workflow.run_command(repo, parser)
     except KeyboardInterrupt:
         print('')
         sys.exit(0)

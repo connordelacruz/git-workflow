@@ -5,14 +5,18 @@ from git.cmd import Git as GitCmd
 from git_workflow.__about__ import __min_git_version__
 
 
-# Verify git and repo
-
-def verify_git_version():
+def verify_git_version(strict=True):
     """Returns True if minimum git version is met for advanced features"""
     g = GitCmd()
     major, minor, patch = g.version_info
     version_float = float('{}.{}'.format(major, minor))
-    return version_float >= __min_git_version__
+    is_version_requirement_met = version_float >= __min_git_version__
+    if strict and not is_version_requirement_met:
+        error_msg = 'Git version of {} or higher required (current version: {})'.format(
+            __min_git_version__, version_float
+        )
+        raise Exception(error_msg)
+    return is_version_requirement_met
 
 
 def get_workflow_config_path(repo):
