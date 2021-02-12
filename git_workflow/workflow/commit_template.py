@@ -70,7 +70,6 @@ class CommitTemplate(WorkflowBase):
 
         :return: Dictionary to pass as kwargs to .format()
         """
-        # TODO: client?
         format_kwargs = {
             'ticket': args['ticket'],
             'branch': branch_name,
@@ -92,14 +91,14 @@ class CommitTemplate(WorkflowBase):
         commit_template_file = files.sanitize_filename(
             '.gitmessage_local_' + self.configs.COMMIT_TEMPLATE_FILENAME_FORMAT.format(**format_kwargs)
         )
-        # TODO make sure does not conflict with existing file; append hex or something if it does and print info
         commit_template_path = os.path.join(repo_root_dir, commit_template_file)
         self.print('Creating commit template file...')
         commit_template_body = self.configs.COMMIT_TEMPLATE_FORMAT.format(**format_kwargs)
         with open(commit_template_path, 'w') as f:
             f.write(commit_template_body)
-        # TODO VERIFY COMMIT TEMPLATE
-        self.print('Template file created:', commit_template_path, formatting=cmd.SUCCESS)
+        if not os.path.exists(commit_template_path):
+            raise Exception('Unable to create commit template at path ' + commit_template_path)
+        self.print('Template file created.', commit_template_path, formatting=cmd.SUCCESS)
         return commit_template_file
 
     def configure_template(self, branch_name, commit_template_file):
@@ -113,7 +112,7 @@ class CommitTemplate(WorkflowBase):
         # TODO REPHRASE OUTPUT. Current output would be fine for --verbose but is too much otherwise
         branch_config_file = files.sanitize_filename(f'config_{branch_name}')
         branch_config_path = os.path.join(self.repo.git_dir, branch_config_file)
-        self.print(f'Configuring commit.template for {branch_name}...')
+        self.print(f'Configuring commit.template for branch {branch_name}...')
         self.repo.git.config('commit.template', commit_template_file, file=branch_config_path)
         self.print(f'commit.template configured in .git/{branch_config_file}.', formatting=cmd.SUCCESS)
         self.print('Configuring local repo...')
