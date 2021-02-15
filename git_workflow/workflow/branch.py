@@ -15,7 +15,7 @@ class Branch(WorkflowBase):
         args = self.get_args()
         branch_name = args['client'] + args['description'] + args['timestamp'] + args['initials']
         # TODO check for bad branch names if configured
-        new_branch = self.create_branch(branch_name)
+        new_branch = self.create_branch(branch_name, base_branch=args['base_branch'])
         # If specified, call commit-template
         if args['ticket']:
             self.print('', 'Checking ticket number format...')
@@ -56,6 +56,16 @@ class Branch(WorkflowBase):
             '-T', '--no-ticket', help="Skip ticket number prompt, don't create commit template (overrides -t)",
             action='store_true', default=False
         ) # https://youtu.be/iHSPf6x1Fdo
+        # Branching
+        branching_args = branch_subparser.add_argument_group('Branching Arguments')
+        base_branch_group = branching_args.add_mutually_exclusive_group()
+        base_branch_group.add_argument(
+            '-b', '--base-branch', metavar='<branch>', help='Specify branch to use as base for new branch (default: master)'
+        )
+        base_branch_group.add_argument(
+            '-B', '--branch-from-current', help='Use currently checked out branch as base (overrides -b)',
+            action='store_true', default=False
+        )
         # TODO --timestamp, other args
 
     def get_args(self):
@@ -115,6 +125,11 @@ class Branch(WorkflowBase):
         timestamp = datetime.datetime.now().strftime('%Y%m%d-')
         args['timestamp'] = timestamp
 
+        base_branch = self.parsed_args.base_branch or self.configs.BASE_BRANCH
+        if self.parsed_args.branch_from_current:
+            base_branch = self.repo.active_branch.name
+        args['base_branch'] = base_branch
+
         return args
 
     def format_branch_name(self, val):
@@ -128,8 +143,8 @@ class Branch(WorkflowBase):
         return re.sub('[ _]+', '-', val.lower())
 
     # TODO use configs and update default docs
-    def create_branch(self, branch_name, base_branch='master',
-                      update_base_branch=True):
+    def create_branch(self, branch_name,
+                      base_branch='master', update_base_branch=True):
         """Create a new branch.
 
         :param branch_name: The name of the new branch to create
