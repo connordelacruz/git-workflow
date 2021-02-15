@@ -91,12 +91,11 @@ class Branch(WorkflowBase):
         description += '-'
         args['description'] = description
 
-        # TODO  or config.initials, print info if configured
         initials = cmd.prompt(
             'Initials',
             'Enter your initials.',
             invalid_msg='Must enter initials.',
-            initial_input=self.parsed_args.initials,
+            initial_input=self.parsed_args.initials or self.configs.INITIALS,
             format_function=self.format_branch_name,
         )
         args['initials'] = initials
