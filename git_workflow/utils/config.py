@@ -3,25 +3,18 @@ from git.exc import GitCommandError
 from . import repository
 
 
-# Possible values for the --type argument in git config command.
-TYPE_BOOL = 'bool'
-TYPE_INT = 'int'
-TYPE_PATH = 'path'
-TYPE_EXPIRY_DATE = 'expiry-date'
-TYPE_COLOR = 'color'
-
-
-def convert_config_value(string_val, config_type):
-    converted_val = string_val
-    if config_type == TYPE_BOOL:
-        converted_val = string_val == 'true'
-    elif config_type == TYPE_INT:
-        converted_val = int(string_val)
-    return converted_val
-
-
 class Configs:
     """Object with variables representing git configs"""
+
+    # Possible values for the --type argument in git config command.
+    TYPE_BOOL = 'bool'
+    TYPE_INT = 'int'
+    TYPE_PATH = 'path'
+    TYPE_EXPIRY_DATE = 'expiry-date'
+    TYPE_COLOR = 'color'
+    # Custom data types (used in convert_config_value())
+    # Space separated list:
+    DATA_TYPE_LIST = 'list'
 
     def __init__(self, repo):
         self.repo = repo
@@ -40,6 +33,10 @@ class Configs:
         #: Base branch.
         #: (Default: 'master')
         self.BASE_BRANCH = self.get_config('baseBranch', 'master')
+        #: Space-separated list of words that should not appear in a branch name
+        # TODO: better name? or support pattern matching??
+        self.BAD_BRANCH_NAME_PATTERNS = self.get_config('badBranchNamePatterns',
+                                                        data_type=self.DATA_TYPE_LIST)
 
         # Commit Templates -----------------------------------------------------
         #: Format of commit template body. Supports the following placeholders:
@@ -70,16 +67,58 @@ class Configs:
         #: validation.
         #: (Default: true)
         self.TICKET_FORMAT_CAPITALIZE = self.get_config('ticketFormatCapitalize',
-                                                        True, TYPE_BOOL)
+                                                        True,
+                                                        config_type=self.TYPE_BOOL)
 
-    def get_config(self, key, default=None, config_type=None, section='workflow'):
+    def get_config(self, key, default=None,
+                   config_type=None, data_type=None,
+                   section='workflow'):
+        """Retrieve a git config value.
+
+        :param key: The config to retrieve
+        :param default: (Optional) Value to return if not configured
+
+        :param config_type: (Optional) Use for --type argument when calling git
+            config command
+        :param data_type: (Default: config_type or None) Passed to
+            convert_config_value(), will alter the type of the returned value
+
+        :param section: (default: 'workflow') Section config key is defined in
+
+        :return: The config value if it exists, otherwise the value of default,
+            or None if no default is specified. If data_type is set, will be
+            passed through convert_config_value()
+        """
         value = default
         config = section + '.' + key
+        if data_type is None and config_type is not None:
+            data_type = config_type
         try:
             default_arg = None if default is None else str(default)
             value = self.repo.git.config(config, get=True, default=default_arg, type=config_type)
-            if config_type:
-                value = convert_config_value(value, config_type)
+            if data_type:
+                value = self.convert_config_value(value, data_type)
         except GitCommandError:
             pass
         return value
+
+    @classmethod
+    def convert_config_value(cls, string_val, data_type):
+        """Convert a string value returned from git config command to a python
+        data type.
+
+        :param string_val: The result of the call to git config command (should be
+            string)
+        :param data_type: TYPE_ or DATA_TYPE_ constant defining what type of data
+            this should be converted to
+
+        :return: The converted value
+        """
+        converted_val = string_val
+        if data_type == cls.TYPE_BOOL:
+            converted_val = string_val == 'true'
+        elif data_type == cls.TYPE_INT:
+            converted_val = int(string_val)
+        elif data_type == cls.DATA_TYPE_LIST:
+            converted_val = string_val.split()
+        return converted_val
