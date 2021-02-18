@@ -161,23 +161,23 @@ class Branch(WorkflowBase):
             base.checkout()
         # Update
         if update_base_branch and base.tracking_branch():
-            self.print('Pulling updates to {}...'.format(base_branch))
+            self.print(f'Pulling updates to {base_branch}...')
             remote_name = base.tracking_branch().remote_name
             remote = Remote(self.repo, remote_name)
             base_commit = base.commit
             for fetch_info in remote.pull():
                 if fetch_info.ref == base.tracking_branch():
                     if fetch_info.commit != base_commit:
-                        self.print('Updated {} to {}'.format(base_branch, fetch_info.commit.hexsha))
+                        self.print(f'Updated {base_branch} to {fetch_info.commit.hexsha}')
                     else:
-                        self.print('{} already up to date.'.format(base_branch))
+                        self.print(f'{base_branch} already up to date.')
             self.print('')
         # Checkout new branch
-        self.print('Creating new branch {}...'.format(branch_name))
+        self.print(f'Creating new branch {branch_name}...')
         # TODO try/except:
         new_active_branch = base.checkout(b=branch_name)
         if new_active_branch.name == branch_name:
-            self.print('Branch created.', formatting=cmd.SUCCESS)
+            self.print_success('Branch created.')
         else:
             pass # TODO should we get here if we wrap the above in try/except?
         return new_active_branch

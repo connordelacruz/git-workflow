@@ -21,17 +21,7 @@ class WorkflowBase(ABC):
         self.verbosity = verbosity
         self.configs = Configs(self.repo)
 
-    def print(self, *lines, required_verbosity=1, formatting=None):
-        """Print a message.
-
-        :param lines: Lines to print
-        :param required_verbosity: (Default: 1) Only print if verbosity is greater than
-            or equal to this value
-        :param formatting: (Optional) Set to a formatting constant from utils.cmd to
-            format output
-        """
-        if self.verbosity >= required_verbosity:
-            cmd.print_multiline(*lines, formatting=formatting)
+    # Abstract Properties and Methods
 
     @property
     @abstractmethod
@@ -60,3 +50,34 @@ class WorkflowBase(ABC):
     def run(self):
         """Execute the script"""
         pass
+
+    # Helper Methods
+
+    def print(self, *lines, required_verbosity=1, **print_multiline_kwargs):
+        """Print a message.
+
+        :param lines: Lines to print
+        :param required_verbosity: (Default: 1) Only print if verbosity is greater than
+            or equal to this value
+
+        :param **print_multiline_kwargs: Any keyword arguments to pass to
+            cmd.print_multiline()
+        """
+        if self.verbosity >= required_verbosity:
+            cmd.print_multiline(*lines, **print_multiline_kwargs)
+
+    def print_error(self, *lines, required_verbosity=1):
+        if self.verbosity >= required_verbosity:
+            cmd.print_error(*lines)
+
+    def print_warning(self, *lines, required_verbosity=1):
+        if self.verbosity >= required_verbosity:
+            cmd.print_warning(*lines)
+
+    def print_success(self, *lines, required_verbosity=1):
+        if self.verbosity >= required_verbosity:
+            cmd.print_success(*lines)
+
+    def print_info(self, *lines, required_verbosity=1):
+        if self.verbosity >= required_verbosity:
+            cmd.print_info(*lines)

@@ -9,12 +9,10 @@ def verify_git_version(strict=True):
     """Returns True if minimum git version is met for advanced features"""
     g = GitCmd()
     major, minor, patch = g.version_info
-    version_float = float('{}.{}'.format(major, minor))
+    version_float = float(f'{major}.{minor}')
     is_version_requirement_met = version_float >= __min_git_version__
     if strict and not is_version_requirement_met:
-        error_msg = 'Git version of {} or higher required (current version: {})'.format(
-            __min_git_version__, version_float
-        )
+        error_msg = f'Git version of {__min_git_version__} or higher required (current version: {version_float})'
         raise Exception(error_msg)
     return is_version_requirement_met
 

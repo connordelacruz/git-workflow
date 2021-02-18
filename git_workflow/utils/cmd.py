@@ -65,6 +65,18 @@ def print_error(*lines):
     print_multiline(*lines, first_line_formatting=ERROR_TITLE, formatting=ERROR)
 
 
+def print_warning(*lines):
+    print_multiline(*lines, formatting=WARNING)
+
+
+def print_success(*lines):
+    print_multiline(*lines, formatting=SUCCESS)
+
+
+def print_info(*lines):
+    print_multiline(*lines, formatting=INFO)
+
+
 # User Input Prompts
 
 def sanitize_input(val):
@@ -164,7 +176,7 @@ def prompt(prompt_text, *extended_description,
     if extended_description:
         print(*extended_description, sep='\n')
     text = COLORS[PROMPT]('> ' + (
-        '{} [{}]'.format(prompt_text, default_val)
+        f'{prompt_text} [{default_val}]'
         if default_val is not None else
         prompt_text
     ) + ': ')
