@@ -14,7 +14,14 @@ class Branch(WorkflowBase):
     def run(self):
         args = self.get_args()
         branch_name = args['client'] + args['description'] + args['timestamp'] + args['initials']
-        # TODO check for bad branch names if configured
+        if self.configs.BAD_BRANCH_NAME_PATTERNS:
+            if args['skip_bad_name_check']:
+                self.print_warning('workflow.badBranchNamePatterns is configured, but -s argument was specified.',
+                                   'Skipping bad branch name check.')
+            else:
+                # Will raise exception if name doesn't check out
+                self.check_branch_name(branch_name)
+        # Create the branch
         new_branch = self.create_branch(branch_name, base_branch=args['base_branch'])
         # If specified, call commit-template
         if args['ticket']:
@@ -45,6 +52,10 @@ class Branch(WorkflowBase):
         )
         branch_name_args.add_argument(
             '-i', '--initials', metavar='<initials>', help='Specify developer initials'
+        )
+        branch_name_args.add_argument(
+            '-s', '--skip-bad-name-check', help='Skip check for bad branch names',
+            action='store_true', default=False
         )
         # Commit Template
         commit_template_args = branch_subparser.add_argument_group('Commit Template Arguments')
@@ -130,6 +141,8 @@ class Branch(WorkflowBase):
             base_branch = self.repo.active_branch.name
         args['base_branch'] = base_branch
 
+        args['skip_bad_name_check'] = self.parsed_args.skip_bad_name_check
+
         return args
 
     def format_branch_name(self, val):
@@ -142,7 +155,26 @@ class Branch(WorkflowBase):
         """
         return re.sub('[ _]+', '-', val.lower())
 
-    # TODO use configs and update default docs
+    def check_branch_name(self, branch_name):
+        """Checks for configured bad patterns in branch name. Raises exception
+        if one is found.
+
+        :param branch_name: Name to check
+        """
+        for bad_pattern in self.configs.BAD_BRANCH_NAME_PATTERNS:
+            if bad_pattern in branch_name:
+                error_msg = '\n'.join([
+                    f'Branch name "{branch_name}" contains invalid pattern "{bad_pattern}".',
+                    '',
+                    'Branch names should not include the following patterns:',
+                    *[cmd.INDENT + pattern for pattern in self.configs.BAD_BRANCH_NAME_PATTERNS],
+                    '',
+                    '(from git config workflow.badBranchNamePatterns)',
+                    '',
+                    'To skip this check, use --skip-bad-name-check argument.'
+                ])
+                raise Exception(error_msg)
+
     def create_branch(self, branch_name,
                       base_branch='master', update_base_branch=True):
         """Create a new branch.

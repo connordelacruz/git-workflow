@@ -72,6 +72,9 @@ def main():
     except KeyboardInterrupt:
         print('')
         sys.exit(0)
+    except Exception as e:
+        utils.cmd.print_error(e)
+        sys.exit(1)
 
 
 if __name__ == '__main__':
