@@ -9,14 +9,6 @@ class CommitTemplate(WorkflowBase):
     command = 'commit-template'
     description = 'Configure git commit template for a branch.'
 
-    def run(self):
-        args = self.get_args()
-        repo_root_dir = os.path.dirname(self.repo.git_dir)
-        branch_name = self.repo.active_branch.name
-        # Create and configure the commit template
-        commit_template_file = self.create_template(args, repo_root_dir, branch_name)
-        self.configure_template(branch_name, commit_template_file)
-
     @classmethod
     def add_subparser(cls, subparsers, generic_parent_parser):
         commit_template_subparser = subparsers.add_parser(
@@ -50,6 +42,16 @@ class CommitTemplate(WorkflowBase):
         args['ticket'] = ticket
 
         return args
+
+    def run(self):
+        args = self.get_args()
+        repo_root_dir = os.path.dirname(self.repo.git_dir)
+        branch_name = self.repo.active_branch.name
+        # Create and configure the commit template
+        commit_template_file = self.create_template(args, repo_root_dir, branch_name)
+        self.configure_template(branch_name, commit_template_file)
+
+    # Helper Methods
 
     def format_ticket_number(self, val):
         """Format ticket number input based on configs.

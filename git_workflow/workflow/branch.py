@@ -11,26 +11,6 @@ class Branch(WorkflowBase):
     command = 'branch'
     description = 'Create a new branch.'
 
-    def run(self):
-        args = self.get_args()
-        branch_name = args['client'] + args['description'] + args['timestamp'] + args['initials']
-        if self.configs.BAD_BRANCH_NAME_PATTERNS:
-            if args['skip_bad_name_check']:
-                self.print_warning('workflow.badBranchNamePatterns is configured, but -s argument was specified.',
-                                   'Skipping bad branch name check.')
-            else:
-                # Will raise exception if name doesn't check out
-                self.check_branch_name(branch_name)
-        # Create the branch
-        new_branch = self.create_branch(branch_name, base_branch=args['base_branch'])
-        # If specified, call commit-template
-        if args['ticket']:
-            self.print('', 'Checking ticket number format...')
-            commit_template_parsed_args = self.parser.parse_args([CommitTemplate.command, args['ticket']])
-            commit_template = CommitTemplate(self.repo, self.parser, parsed_args=commit_template_parsed_args,
-                                             verbosity=self.verbosity)
-            commit_template.run()
-
     @classmethod
     def add_subparser(cls, subparsers, generic_parent_parser):
         branch_subparser = subparsers.add_parser(
@@ -77,7 +57,6 @@ class Branch(WorkflowBase):
             '-B', '--branch-from-current', help='Use currently checked out branch as base (overrides -b)',
             action='store_true', default=False
         )
-        # TODO --timestamp, other args
 
     def get_args(self):
         """Parse command line arguments and prompt for any missing values.
@@ -144,6 +123,28 @@ class Branch(WorkflowBase):
         args['skip_bad_name_check'] = self.parsed_args.skip_bad_name_check
 
         return args
+
+    def run(self):
+        args = self.get_args()
+        branch_name = args['client'] + args['description'] + args['timestamp'] + args['initials']
+        if self.configs.BAD_BRANCH_NAME_PATTERNS:
+            if args['skip_bad_name_check']:
+                self.print_warning('workflow.badBranchNamePatterns is configured, but -s argument was specified.',
+                                   'Skipping bad branch name check.')
+            else:
+                # Will raise exception if name doesn't check out
+                self.check_branch_name(branch_name)
+        # Create the branch
+        new_branch = self.create_branch(branch_name, base_branch=args['base_branch'])
+        # If specified, call commit-template
+        if args['ticket']:
+            self.print('', 'Checking ticket number format...')
+            commit_template_parsed_args = self.parser.parse_args([CommitTemplate.command, args['ticket']])
+            commit_template = CommitTemplate(self.repo, self.parser, parsed_args=commit_template_parsed_args,
+                                             verbosity=self.verbosity)
+            commit_template.run()
+
+    # Helper Methods
 
     def format_branch_name(self, val):
         """Convert text to lowercase and replace spaces and underscores with

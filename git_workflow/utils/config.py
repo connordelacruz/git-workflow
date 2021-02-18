@@ -34,7 +34,6 @@ class Configs:
         #: (Default: 'master')
         self.BASE_BRANCH = self.get_config('baseBranch', 'master')
         #: Space-separated list of words that should not appear in a branch name
-        # TODO: better name? or support pattern matching??
         self.BAD_BRANCH_NAME_PATTERNS = self.get_config('badBranchNamePatterns',
                                                         data_type=self.DATA_TYPE_LIST)
 
