@@ -66,9 +66,8 @@ def main():
             return
     # Argument Parser
     parser = get_parser()
-    # TODO exit code and try/except
     try:
-        exit_code = workflow.run_command(repo, parser)
+        workflow.run_command(repo, parser)
     except KeyboardInterrupt:
         print('')
         sys.exit(0)

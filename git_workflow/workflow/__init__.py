@@ -21,20 +21,16 @@ def add_command_subparsers(subparsers, generic_parent_parser):
 
 
 def run_command(repo, parser):
-    """Run a workflow command
+    """Run a workflow command.
 
     :param repo: Repo object
     :param parser: ArgumentParser object
-
-    :return: Exit code from command execution
     """
-    exit_code = 0
     parsed_args = parser.parse_args()
     command_class = commands.get(parsed_args.command, False)
     if not command_class:
-        exit_code = 1
+        # exit_code = 1 # TODO implement? or raise specific exception
         parser.print_help()
     else:
         command = command_class(repo, parser, parsed_args=parsed_args)
-        command.run()  # TODO return exit_code? Or just raise exception?
-    return exit_code
+        command.run()
