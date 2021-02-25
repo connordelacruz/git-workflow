@@ -89,7 +89,7 @@ class Configs:
             passed through convert_config_value()
         """
         value = default
-        config = section + '.' + key
+        config = f'{section}.{key}' if section else key
         if data_type is None and config_type is not None:
             data_type = config_type
         try:

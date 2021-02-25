@@ -1,11 +1,13 @@
 """The workflow scripts"""
 from .branch import Branch
 from .commit_template import CommitTemplate
+from .unset_template import UnsetTemplate
 
 #: Maps command names to WorkflowBase subclasses
 commands = {
     Branch.command: Branch,
     CommitTemplate.command: CommitTemplate,
+    UnsetTemplate.command: UnsetTemplate,
 }
 
 

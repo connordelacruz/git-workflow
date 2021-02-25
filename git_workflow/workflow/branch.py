@@ -62,7 +62,8 @@ class Branch(WorkflowBase):
         """Parse command line arguments and prompt for any missing values.
 
         :return: A dictionary with the following keys:
-            client, description, initials, timestamp
+            client, description, initials, ticket, timestamp, base_branch,
+            skip_bad_name_check
         """
         args = {}
         client = None
