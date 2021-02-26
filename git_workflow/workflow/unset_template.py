@@ -44,14 +44,12 @@ class UnsetTemplate(WorkflowBase):
         """Parse command line arguments and prompt for any missing values.
 
         :return: A dictionary with the following keys:
-            TODO: list
+            branch, confirm
         """
         args = {}
-
         args['branch'] = (self.parsed_args.branch
                           if self.parsed_args.branch is not None else
                           self.repo.active_branch.name)
-
         # Default to config value unless otherwise specified
         args['confirm'] = (self.configs.UNSET_TEMPLATE_CONFIRMATION_PROMPT
                            if self.parsed_args.confirm is None else
@@ -98,7 +96,6 @@ class UnsetTemplate(WorkflowBase):
         else:
             self.print('Commit template file already removed.')
         # If branch config is now empty, delete the file and unset includeIf
-        # TODO re: above, commit-template won't add duplicate entry for include path, will it?
         if os.stat(branch_config_path).st_size == 0:
             self.print(f'Removing empty branch config file and unsetting include...')
             self.unset_includeif_onbranch_path(args['branch'])

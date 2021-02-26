@@ -214,11 +214,10 @@ class Branch(WorkflowBase):
             self.print('')
         # Checkout new branch
         self.print(f'Creating new branch {branch_name}...')
-        # TODO try/except:
         new_active_branch = base.checkout(b=branch_name)
         if new_active_branch.name == branch_name:
             self.print_success('Branch created.')
         else:
-            pass # TODO should we get here if we wrap the above in try/except?
+            pass # TODO should we get here? checkout() should raise exception
         return new_active_branch
 
