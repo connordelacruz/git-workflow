@@ -1,7 +1,7 @@
 """Base class for workflow scripts."""
 from abc import ABC, abstractmethod
 from git_workflow.utils import cmd
-from git_workflow.utils.config import Configs
+from git_workflow.utils.configs import Configs
 
 
 class WorkflowBase(ABC):
