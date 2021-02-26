@@ -63,6 +63,7 @@ class Branch(WorkflowBase):
             '-B', '--branch-from-current', help='Use currently checked out branch as base (overrides -b)',
             action='store_true', default=False
         )
+        # TODO --no-pull, -P
 
     def get_args(self):
         """Parse command line arguments and prompt for any missing values.
@@ -127,6 +128,9 @@ class Branch(WorkflowBase):
             base_branch = self.repo.active_branch.name
         args['base_branch'] = base_branch
 
+        # TODO
+        args['no_pull'] = False
+
         args['skip_bad_name_check'] = self.parsed_args.skip_bad_name_check
 
         return args
@@ -141,11 +145,34 @@ class Branch(WorkflowBase):
             else:
                 # Will raise exception if name doesn't check out
                 self.check_branch_name(branch_name)
-        # Create the branch
-        new_branch = self.create_branch(branch_name, base_branch=args['base_branch'])
+        # Checkout base_branch
+        base_branch = args['base_branch']
+        base = Head(self.repo, 'refs/heads/' + base_branch)
+        if self.repo.active_branch != base:
+            base.checkout()
+        # Update
+        if not args['no_pull'] and base.tracking_branch():
+            self.print(f'Pulling updates to {base_branch}...')
+            remote_name = base.tracking_branch().remote_name
+            remote = Remote(self.repo, remote_name)
+            base_commit = base.commit
+            for fetch_info in remote.pull():
+                if fetch_info.ref == base.tracking_branch():
+                    if fetch_info.commit != base_commit:
+                        self.print(f'Updated {base_branch} to {fetch_info.commit.hexsha}')
+                    else:
+                        self.print(f'{base_branch} already up to date.')
+            self.print('')
+        # Checkout new branch
+        self.print(f'Creating new branch {branch_name}...')
+        new_active_branch = base.checkout(b=branch_name)
+        if new_active_branch.name == branch_name:
+            self.print_success('Branch created.', '')
+        else:
+            pass # TODO should we get here? checkout() should raise exception
         # If specified, call commit-template
         if args['ticket']:
-            self.print('', 'Checking ticket number format...')
+            self.print('Checking ticket number format...')
             commit_template_parsed_args = self.parser.parse_args([CommitTemplate.command, args['ticket']])
             commit_template = CommitTemplate(self.repo, self.parser, parsed_args=commit_template_parsed_args,
                                              verbosity=self.verbosity)
@@ -182,42 +209,3 @@ class Branch(WorkflowBase):
                     'To skip this check, use --skip-bad-name-check argument.'
                 ])
                 raise Exception(error_msg)
-
-    def create_branch(self, branch_name,
-                      base_branch='master', update_base_branch=True):
-        """Create a new branch.
-
-        :param branch_name: The name of the new branch to create
-        :param base_branch: (Default: 'master') New branch will be based off
-            this branch
-        :param update_base_branch: (Default: True) If true, attempt to pull
-            changes to base_branch before branching
-
-        :return: New branch name
-        """
-        # Checkout base_branch
-        base = Head(self.repo, 'refs/heads/' + base_branch)
-        if self.repo.active_branch != base:
-            base.checkout()
-        # Update
-        if update_base_branch and base.tracking_branch():
-            self.print(f'Pulling updates to {base_branch}...')
-            remote_name = base.tracking_branch().remote_name
-            remote = Remote(self.repo, remote_name)
-            base_commit = base.commit
-            for fetch_info in remote.pull():
-                if fetch_info.ref == base.tracking_branch():
-                    if fetch_info.commit != base_commit:
-                        self.print(f'Updated {base_branch} to {fetch_info.commit.hexsha}')
-                    else:
-                        self.print(f'{base_branch} already up to date.')
-            self.print('')
-        # Checkout new branch
-        self.print(f'Creating new branch {branch_name}...')
-        new_active_branch = base.checkout(b=branch_name)
-        if new_active_branch.name == branch_name:
-            self.print_success('Branch created.')
-        else:
-            pass # TODO should we get here? checkout() should raise exception
-        return new_active_branch
-
