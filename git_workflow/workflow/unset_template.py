@@ -71,38 +71,22 @@ class UnsetTemplate(WorkflowBase):
 
     # Helper Methods
 
-    # TODO make generic method in Configs to retrieve any config and use kwargs?
     def get_branch_config_file(self, branch):
-        branch_config_file = None
-        try:
-            branch_config_file = self.repo.git.config(
-                f'includeif.onbranch:{branch}.path',
-                get=True, local=True, includes=True
-            )
-        except GitCommandError:
-            pass
-        return branch_config_file
+        return self.configs.get_config(
+            f'includeif.onbranch:{branch}.path',
+            local=True, includes=True
+        )
 
     def get_commit_template_file_and_unset_config(self, branch_config_path):
-        commit_template_file = None
-        try:
-            commit_template_file = self.repo.git.config(
-                'commit.template',
-                file=branch_config_path, get=True
-            )
-            self.repo.git.config(
-                'commit.template',
-                file=branch_config_path, unset=True
-            )
-        except GitCommandError:
-            pass
+        commit_template_file = self.configs.get_config(
+            'commit.template', file=branch_config_path
+        )
+        self.configs.unset_config(
+            'commit.template', file=branch_config_path
+        )
         return commit_template_file
 
     def unset_includeif_onbranch_path(self, branch):
-        try:
-            self.repo.git.config(
-                f'includeif.onbranch:{branch}.path',
-                file=self.configs.CONFIG_PATH, unset=True
-            )
-        except GitCommandError:
-            pass
+        self.configs.unset_config(
+            f'includeif.onbranch:{branch}.path', file=self.configs.CONFIG_PATH
+        )
