@@ -1,5 +1,6 @@
 import os
 from git import GitCommandError
+from git_workflow.utils import cmd
 from .base import WorkflowBase
 
 
@@ -15,7 +16,29 @@ class UnsetTemplate(WorkflowBase):
             cls.command, description=cls.description, help=cls.description,
             parents=[generic_parent_parser], add_help=False
         )
-        # TODO ARGS; configure to prompt for confirmation unless -f
+        # Specify branch
+        positional_args = unset_commit_template_subparser.add_argument_group(
+            'Positional Arguments'
+        )
+        positional_args.add_argument(
+            'branch', metavar='<branch>', nargs='?',
+            help='Branch to unset template for (default: current)',
+            default=None
+        )
+        # Confirmation prompt
+        confirmation_args = unset_commit_template_subparser.add_argument_group(
+            'Confirmation Prompt Arguments',
+            'Override workflow.unsetTemplateConfirmationPrompt config.'
+        )
+        confirmation_group = confirmation_args.add_mutually_exclusive_group()
+        confirmation_group.add_argument(
+            '-f', '--force', help='Skip confirmation prompt (if configured)',
+            dest='confirm', action='store_false', default=None
+        )
+        confirmation_group.add_argument(
+            '-c', '--confirmation', help='Prompt for confirmation before unsetting',
+            dest='confirm', action='store_true', default=None
+        )
 
     def get_args(self):
         """Parse command line arguments and prompt for any missing values.
@@ -25,10 +48,14 @@ class UnsetTemplate(WorkflowBase):
         """
         args = {}
 
-        # TODO: take parsed_args.branch
-        branch = self.repo.active_branch.name
-        args['branch'] = branch
+        args['branch'] = (self.parsed_args.branch
+                          if self.parsed_args.branch is not None else
+                          self.repo.active_branch.name)
 
+        # Default to config value unless otherwise specified
+        args['confirm'] = (self.configs.UNSET_TEMPLATE_CONFIRMATION_PROMPT
+                           if self.parsed_args.confirm is None else
+                           self.parsed_args.confirm)
         return args
 
     def run(self):
@@ -38,8 +65,17 @@ class UnsetTemplate(WorkflowBase):
         if branch_config_file is None:
             self.print(f'Branch {args["branch"]} does not have an associated config file.')
             return
-        branch_config_path = os.path.join(self.repo.git_dir, branch_config_file)
+        # Confirmation prompt
+        if args['confirm']:
+            confirmation = cmd.prompt(
+                'Unset Template? (y/n)',
+                f'Unset commit template for {args["branch"]}?',
+                default_val='n', validate_function=cmd.validate_yn
+            )
+            if not confirmation:
+                return
         # Verify config file exists
+        branch_config_path = os.path.join(self.repo.git_dir, branch_config_file)
         if not os.path.exists(branch_config_path):
             self.print(f'Config file {branch_config_file} not found, unsetting include...')
             self.unset_includeif_onbranch_path(args['branch'])

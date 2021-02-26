@@ -107,6 +107,25 @@ def validate_nonempty(val, error_msg=None):
     return val
 
 
+def validate_yn(val, error_msg=None):
+    """Validate y/n prompts
+
+    :param val: User response to y/n prompt. If a boolean value is passed
+        (e.g. if a prompt received initial_input=True), it is treated as a y/n
+        answer and considered valid input
+    :param error_msg: (Optional) Custom error text to print if val is invalid
+
+    :return: True if user answered yes, False if user answered no
+    """
+    # If a boolean value was passed, return it
+    if isinstance(val, bool):
+        return val
+    val = val.lower().strip()
+    if val not in ['y', 'yes', 'n', 'no']:
+        raise ValidationError(error_msg or 'Please enter "y" or "n".')
+    return val in ['y', 'yes']
+
+
 def generate_validate_regex_function(expr, default_error_msg='No matches found.', show_expr_in_error_msg=True):
     """Generate a validation function that validates a given regular expression.
 

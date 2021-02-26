@@ -60,6 +60,15 @@ class Configs:
         self.COMMIT_TEMPLATE_FILENAME_FORMAT = self.get_workflow_config(
             'commitTemplateFilenameFormat', default='{ticket}_{branch}'
         )
+        #: If true, unset-template will prompt before unsetting unless -f is
+        #: specified. If false, will not prompt for confirmation unless -i is
+        #: specified.
+        #:
+        #: (Default: true)
+        self.UNSET_TEMPLATE_CONFIRMATION_PROMPT = self.get_workflow_config(
+            'unsetTemplateConfirmationPrompt', default=True,
+            config_type=self.TYPE_BOOL
+        )
 
         # Ticket Numbers -------------------------------------------------------
         #: Regex representing the format of a valid ticket number. Default

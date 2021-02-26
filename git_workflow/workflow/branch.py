@@ -18,7 +18,9 @@ class Branch(WorkflowBase):
             parents=[generic_parent_parser], add_help=False
         )
         # Branch Name
-        branch_name_args = branch_subparser.add_argument_group('Branch Name Arguments')
+        branch_name_args = branch_subparser.add_argument_group(
+            'Branch Name Arguments'
+        )
         client_group = branch_name_args.add_mutually_exclusive_group()
         client_group.add_argument(
             '-c', '--client', metavar='<client>', help='Specify client name'
@@ -38,7 +40,9 @@ class Branch(WorkflowBase):
             action='store_true', default=False
         )
         # Commit Template
-        commit_template_args = branch_subparser.add_argument_group('Commit Template Arguments')
+        commit_template_args = branch_subparser.add_argument_group(
+            'Commit Template Arguments'
+        )
         ticket_group = commit_template_args.add_mutually_exclusive_group()
         ticket_group.add_argument(
             '-t', '--ticket', metavar='<ticket#>', help='Specify ticket number (will create commit template)'
@@ -48,7 +52,9 @@ class Branch(WorkflowBase):
             action='store_true', default=False
         ) # https://youtu.be/iHSPf6x1Fdo
         # Branching
-        branching_args = branch_subparser.add_argument_group('Branching Arguments')
+        branching_args = branch_subparser.add_argument_group(
+            'Branching Arguments'
+        )
         base_branch_group = branching_args.add_mutually_exclusive_group()
         base_branch_group.add_argument(
             '-b', '--base-branch', metavar='<branch>', help='Specify branch to use as base for new branch (default: master)'

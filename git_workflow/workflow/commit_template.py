@@ -15,7 +15,10 @@ class CommitTemplate(WorkflowBase):
             cls.command, description=cls.description, help=cls.description,
             parents=[generic_parent_parser], add_help=False
         )
-        commit_template_subparser.add_argument(
+        positional_args = commit_template_subparser.add_argument_group(
+            'Positional Arguments'
+        )
+        positional_args.add_argument(
             'ticket', metavar='<ticket>', nargs='?', help='Ticket number to use in commit template',
             default=None
         )
