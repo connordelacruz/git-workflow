@@ -81,7 +81,7 @@ class UnsetTemplate(WorkflowBase):
         if not os.path.exists(branch_config_path):
             self.print(f'Config file {branch_config_file} not found, unsetting include...')
             self.unset_includeif_onbranch_path(branch)
-            self.print_success('Config include removed.')
+            self.print_success('Config include removed.', '')
             return
         # Unset commit.template in branch config file
         self.print(f'Unsetting commit.template config for {branch}...')
@@ -89,19 +89,19 @@ class UnsetTemplate(WorkflowBase):
             'commit.template', file=branch_config_path
         )
         if commit_template_file is None:
-            self.print(f'commit.template not configured for branch {branch}.')
+            self.print(f'commit.template not configured for branch {branch}.', '')
             return
         self.configs.unset_config(
             'commit.template', file=branch_config_path
         )
-        self.print_success('commit.template config unset.')
+        self.print_success('commit.template config unset.', '')
         # Delete commit template
         repo_root_dir = os.path.dirname(self.repo.git_dir)
         commit_template_path = os.path.join(repo_root_dir, commit_template_file)
         if os.path.exists(commit_template_path):
             self.print(f'Deleting commit template file {commit_template_file}...')
             os.remove(commit_template_path)
-            self.print_success('Commit template file removed.')
+            self.print_success('Commit template file removed.', '')
         else:
             self.print('Commit template file already removed.')
         # If branch config is now empty, delete the file and unset includeIf
@@ -109,7 +109,7 @@ class UnsetTemplate(WorkflowBase):
             self.print(f'Removing empty branch config file and unsetting include...')
             self.unset_includeif_onbranch_path(branch)
             os.remove(branch_config_path)
-            self.print_success(f'Empty branch config removed.')
+            self.print_success(f'Empty branch config removed.', '')
 
     # Helper Methods
 

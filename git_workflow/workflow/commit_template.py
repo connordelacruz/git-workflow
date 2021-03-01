@@ -63,7 +63,7 @@ class CommitTemplate(WorkflowBase):
             f.write(commit_template_body)
         if not os.path.exists(commit_template_path):
             raise Exception('Unable to create commit template at path ' + commit_template_path)
-        self.print_success('Template file created.', commit_template_path)
+        self.print_success('Template file created.', commit_template_path, '')
         # Configure commit template
         # TODO REPHRASE OUTPUT. Current output would be fine for --verbose but is too much otherwise
         branch_config_file = files.sanitize_filename(f'config_{branch_name}')
@@ -72,14 +72,15 @@ class CommitTemplate(WorkflowBase):
         self.print(f'Configuring commit.template for branch {branch_name}...')
         self.repo.git.config('commit.template', commit_template_file,
                              file=branch_config_path)
-        self.print_success(f'commit.template configured in .git/{branch_config_file}.')
+        self.print_success(f'commit.template configured in .git/{branch_config_file}.', '')
         # Add includeIf for branch config to local config
         self.print('Configuring local repo...')
         self.repo.git.config(f'includeIf.onbranch:{branch_name}.path', branch_config_file,
                              file=self.configs.CONFIG_PATH)
         self.print_success('Local repo configured.',
                            f'Will include branch config .git/{branch_config_file}',
-                           f'when branch {branch_name} is checked out.')
+                           f'when branch {branch_name} is checked out.',
+                           '')
 
     # Helper Methods
 
