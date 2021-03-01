@@ -63,7 +63,10 @@ class Branch(WorkflowBase):
             '-B', '--branch-from-current', help='Use currently checked out branch as base (overrides -b)',
             action='store_true', default=False
         )
-        # TODO --no-pull, -P
+        base_branch_group.add_argument(
+            '-P', '--no-pull', help='Skip pulling changes to base branch.',
+            action='store_true', default=False
+        )
 
     def get_args(self):
         """Parse command line arguments and prompt for any missing values.
@@ -108,7 +111,6 @@ class Branch(WorkflowBase):
         )
         args['initials'] = initials
 
-        # TODO use CommitTemplate validate method (only if the input isn't empty)
         ticket = None
         if not self.parsed_args.no_ticket:
             ticket = cmd.prompt(
@@ -128,8 +130,7 @@ class Branch(WorkflowBase):
             base_branch = self.repo.active_branch.name
         args['base_branch'] = base_branch
 
-        # TODO
-        args['no_pull'] = False
+        args['no_pull'] = self.parsed_args.no_pull
 
         args['skip_bad_name_check'] = self.parsed_args.skip_bad_name_check
 
