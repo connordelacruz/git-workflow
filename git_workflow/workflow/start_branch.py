@@ -3,12 +3,12 @@ import re
 from git import Head, Remote
 from git_workflow.utils import cmd
 from .base import WorkflowBase
-from .commit_template import CommitTemplate
+from .set_template import SetTemplate
 
 
-class Branch(WorkflowBase):
+class StartBranch(WorkflowBase):
     """Create a new branch."""
-    command = 'branch'
+    command = 'start'
     description = 'Create a new branch.'
 
     @classmethod
@@ -174,10 +174,10 @@ class Branch(WorkflowBase):
         # If specified, call commit-template
         if args['ticket']:
             self.print('Checking ticket number format...')
-            commit_template_parsed_args = self.parser.parse_args([CommitTemplate.command, args['ticket']])
-            commit_template = CommitTemplate(self.repo, self.parser, parsed_args=commit_template_parsed_args,
-                                             verbosity=self.verbosity)
-            commit_template.run()
+            set_template_parsed_args = self.parser.parse_args([SetTemplate.command, args['ticket']])
+            set_template = SetTemplate(self.repo, self.parser, parsed_args=set_template_parsed_args,
+                                       verbosity=self.verbosity)
+            set_template.run()
 
     # Helper Methods
 

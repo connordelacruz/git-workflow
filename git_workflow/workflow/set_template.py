@@ -3,10 +3,9 @@ from git_workflow.utils import cmd, files
 from .base import WorkflowBase
 
 
-class CommitTemplate(WorkflowBase):
+class SetTemplate(WorkflowBase):
     """Create and configure commit template."""
-    # TODO shorter command? maybe sub-sub commands (template set and template unset)
-    command = 'commit-template'
+    command = 'set-template'
     description = 'Configure git commit template for a branch.'
 
     @classmethod
