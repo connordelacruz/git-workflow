@@ -4,15 +4,6 @@ Git Workflow Tools
 
 .. contents::
 
-TODO
-====
-
--  Copy over relevant items from old scripts readme
-- Setup
-    - Python 3.6 (developed using 3.9.2)
-    - Git Version
-- Demos
-
 Overview
 ========
 
