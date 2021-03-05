@@ -10,6 +10,7 @@ from io import StringIO
 import os
 import sys
 import jinja2
+from git_workflow.__about__ import *
 from git_workflow.__main__ import get_parser
 from git_workflow.workflow import commands
 
@@ -20,8 +21,13 @@ RST_INDENT = ' ' * 4
 def main():
     # Set context for template
     context = {
+        'about': {
+            'version': __version__,
+            'min_python_version': __min_python_version__,
+            'min_git_version': __min_git_version__,
+        },
         'workflow': {
-            'command': 'workflow',
+            'command': __command__,
         },
     }
     parser = get_parser(prog='workflow')

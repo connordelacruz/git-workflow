@@ -21,13 +21,16 @@ setup(
     packages=['git_workflow'],
     entry_points={
         'console_scripts': [
-            'workflow = git_workflow.__main__:main',
+            about['__command__'] + ' = git_workflow.__main__:main',
         ]
     },
     install_requires=[
         'GitPython>=3.1,<3.2',
         'blessings>=1.7,<1.8',
     ],
-    python_requires='>=3.6',
+    extras_require={
+        'dev': ['Jinja2>=2.11,<2.12',],
+    },
+    python_requires='>=' + about['__min_python_version__'],
 )
 
