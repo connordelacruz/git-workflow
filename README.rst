@@ -158,12 +158,13 @@ To ignore generated template files in a single git repo, add the following to th
 
 Commands
 ========
+.. todo insert sections for remaining commands 
 
 ``start``
 ---------
 
 Usage
------
+~~~~~
 
 ::
 
@@ -197,4 +198,52 @@ Usage
       -B, --branch-from-current
                             Use currently checked out branch as base (overrides -b)
       -P, --no-pull         Skip pulling changes to base branch.
+    
+
+
+``set-template``
+----------------
+
+Usage
+~~~~~
+
+::
+
+    usage: workflow set-template [-h] [-V] [<ticket>]
+    
+    Configure git commit template for a branch.
+    
+    General:
+      -h, --help     Show this help message and exit
+      -V, --version  Show version number and exit
+    
+    Positional Arguments:
+      <ticket>       Ticket number to use in commit template
+    
+
+
+``unset-template``
+------------------
+
+Usage
+~~~~~
+
+::
+
+    usage: workflow unset-template [-h] [-V] [-f | -c] [<branch>]
+    
+    Remove commit template for a branch.
+    
+    General:
+      -h, --help          Show this help message and exit
+      -V, --version       Show version number and exit
+    
+    Positional Arguments:
+      <branch>            Branch to unset template for (default: current)
+    
+    Confirmation Prompt Arguments:
+      Override workflow.unsetTemplateConfirmationPrompt config.
+    
+      -f, --force         Skip confirmation prompt (if configured)
+      -c, --confirmation  Prompt for confirmation before unsetting
     

@@ -158,6 +158,7 @@ To ignore generated template files in a single git repo, add the following to th
 
 Commands
 ========
+.. todo insert sections for remaining commands 
 {# Formats RST header for a command #}
 {% macro command_header(command) -%}
 ``{{command}}``
@@ -166,15 +167,27 @@ Commands
 {# Usage sections #}
 {% macro command_usage(help_text) -%}
 Usage
------
+~~~~~
 
 ::
 
     {{help_text}}
 {%- endmacro %}
 
-{# start #}
+{# --- start --- #}
 {{ command_header(start.command) }}
 
 {{ command_usage(start.help) }}
+
+
+{# --- set-template --- #}
+{{ command_header(set_template.command) }}
+
+{{ command_usage(set_template.help) }}
+
+
+{# --- unset-template --- #}
+{{ command_header(unset_template.command) }}
+
+{{ command_usage(unset_template.help) }}
 
