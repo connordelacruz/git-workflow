@@ -33,11 +33,12 @@ def get_generic_parent_parser():
     #                    help='Set verbosity level')
     return parser
 
-def get_parser():
+def get_parser(prog=None):
     """Returns ArgumentParser for main"""
     generic_parent_parser = get_generic_parent_parser()
     parser = argparse.ArgumentParser(parents=[generic_parent_parser],
-                                     add_help=False)
+                                     add_help=False,
+                                     prog=prog)
     subparsers = parser.add_subparsers(title='Commands',
                                        description=f"Run '{parser.prog} <command> --help' for details",
                                        dest='command', metavar='<command>')

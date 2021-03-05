@@ -47,6 +47,8 @@ Finish a Branch
 
 .. todo Doc when implemented, include demos
 
+**NOT YET IMPLEMENTED**
+
 
 Create a Commit Template for an Existing Branch
 -----------------------------------------------
@@ -77,4 +79,34 @@ Tidy Up Commit Templates
 
 .. todo Doc when implemented, include demos
 
+**NOT YET IMPLEMENTED**
+
+
+Setup
+=====
+
+**TODO**
+
+
+Commands
+========
+{# Formats RST header for a command #}
+{% macro command_header(command) -%}
+``{{command}}``
+{{ '-' * (command|length() + 4) }}
+{%- endmacro %}
+{# Usage sections #}
+{% macro command_usage(help_text) -%}
+Usage
+-----
+
+::
+
+    {{help_text}}
+{%- endmacro %}
+
+{# start #}
+{{ command_header(start.command) }}
+
+{{ command_usage(start.help) }}
 

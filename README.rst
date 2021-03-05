@@ -47,6 +47,8 @@ Finish a Branch
 
 .. todo Doc when implemented, include demos
 
+**NOT YET IMPLEMENTED**
+
 
 Create a Commit Template for an Existing Branch
 -----------------------------------------------
@@ -77,3 +79,54 @@ Tidy Up Commit Templates
 
 .. todo Doc when implemented, include demos
 
+**NOT YET IMPLEMENTED**
+
+
+Setup
+=====
+
+**TODO**
+
+
+Commands
+========
+
+``start``
+---------
+
+Usage
+-----
+
+::
+
+    usage: workflow start [-h] [-V] [-c <client> | -C] [-d <description>] [-i <initials>] [-s] [-t <ticket#> | -T] [-b <branch> | -B | -P]
+    
+    Create a new branch.
+    
+    General:
+      -h, --help            Show this help message and exit
+      -V, --version         Show version number and exit
+    
+    Branch Name Arguments:
+      -c <client>, --client <client>
+                            Specify client name
+      -C, --no-client       No client name (skips prompt)
+      -d <description>, --description <description>
+                            Specify branch description
+      -i <initials>, --initials <initials>
+                            Specify developer initials
+      -s, --skip-bad-name-check
+                            Skip check for bad branch names
+    
+    Commit Template Arguments:
+      -t <ticket#>, --ticket <ticket#>
+                            Specify ticket number (will create commit template)
+      -T, --no-ticket       Skip ticket number prompt, don't create commit template (overrides -t)
+    
+    Branching Arguments:
+      -b <branch>, --base-branch <branch>
+                            Specify branch to use as base for new branch (default: master)
+      -B, --branch-from-current
+                            Use currently checked out branch as base (overrides -b)
+      -P, --no-pull         Skip pulling changes to base branch.
+    
