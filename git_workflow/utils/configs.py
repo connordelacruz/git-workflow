@@ -1,4 +1,5 @@
 """Utilities for interacting with git configs."""
+import textwrap
 from git.exc import GitCommandError
 from . import repository
 
@@ -16,76 +17,113 @@ class Configs:
     # Space separated list:
     DATA_TYPE_LIST = 'list'
 
-    def __init__(self, repo, debug=False):
+    def __init__(self, repo, debug=False, no_init=False):
         self.repo = repo
         self.debug = debug
         # Make sure repo is initialized before proceeding
-        repository.initialize(self.repo)
+        if not no_init:
+            repository.initialize(self.repo)
 
+        # CONFIGS ==============================================================
         # Internal -------------------------------------------------------------
-        #: Path to workflow config for this repo.
+        # configPath
+        self.CONFIG_PATH_DOC = (
+            'Path to workflow config for this repo.'
+        )
         self.CONFIG_PATH = self.get_workflow_config('configpath')
 
         # User Details ---------------------------------------------------------
-        #: User initials.
+        # initials
+        self.INITIALS_DOC = (
+            'User initials.'
+        )
         self.INITIALS = self.get_workflow_config('initials')
 
         # Branches -------------------------------------------------------------
-        #: Base branch.
-        #: (Default: 'master')
+        # baseBranch
+        self.BASE_BRANCH_DOC = textwrap.dedent(
+            '''\
+            Base branch.
+            (Default: 'master')
+            ''')
         self.BASE_BRANCH = self.get_workflow_config(
             'baseBranch', default='master'
         )
-        #: Space-separated list of words that should not appear in a branch name
+        # badBranchNamePatterns
+        self.BAD_BRANCH_NAME_PATTERNS_DOC = (
+            'Space-separated list of words that should not appear in a branch name.'
+        )
         self.BAD_BRANCH_NAME_PATTERNS = self.get_workflow_config(
             'badBranchNamePatterns',
             data_type=self.DATA_TYPE_LIST
         )
 
         # Commit Templates -----------------------------------------------------
-        #: Format of commit template body. Supports the following placeholders:
-        #:   {ticket} - Replaced with ticket number
-        #:   {branch} - Replaced with branch name
-        #:   {initials} - Replaced with branch name
-        #:
-        #: (Default: '[{ticket}] ')
+        # commitTemplateFormat
+        self.COMMIT_TEMPLATE_FORMAT_DOC = textwrap.dedent(
+            '''\
+            Format of commit template body. Supports the following placeholders:
+              {ticket} - Replaced with ticket number
+              {branch} - Replaced with branch name
+              {initials} - Replaced with branch name
+
+            (Default: '[{ticket}] ')
+            ''')
         self.COMMIT_TEMPLATE_FORMAT = self.get_workflow_config(
             'commitTemplateFormat', default='[{ticket}] '
         )
-        #: Format of commit template filenames. Supports same placeholders as
-        #: commitTemplateFormat.
-        #: NOTE: Resulting filenames will always begin with '.gitmessage_local_'.
-        #:
-        #: (Default: '{ticket}_{branch}')
+        # commitTemplateFilenameFormat
+        self.COMMIT_TEMPLATE_FILENAME_FORMAT_DOC = textwrap.dedent(
+            '''\
+            Format of commit template filenames. Supports same placeholders as
+            commitTemplateFormat.
+            NOTE: Resulting filenames will always begin with '.gitmessage_local_'.
+
+            (Default: '{ticket}_{branch}')
+            ''')
         self.COMMIT_TEMPLATE_FILENAME_FORMAT = self.get_workflow_config(
             'commitTemplateFilenameFormat', default='{ticket}_{branch}'
         )
-        #: If true, unset-template will prompt before unsetting unless -f is
-        #: specified. If false, will not prompt for confirmation unless -i is
-        #: specified.
-        #:
-        #: (Default: true)
+        # unsetTemplateConfirmationPrompt
+        self.UNSET_TEMPLATE_CONFIRMATION_PROMPT_DOC = textwrap.dedent(
+            '''\
+            If true, unset-template will prompt before unsetting unless -f is
+            specified. If false, will not prompt for confirmation unless -i is
+            specified.
+
+            (Default: true)
+            ''')
         self.UNSET_TEMPLATE_CONFIRMATION_PROMPT = self.get_workflow_config(
             'unsetTemplateConfirmationPrompt', default=True,
             config_type=self.TYPE_BOOL
         )
 
         # Ticket Numbers -------------------------------------------------------
-        #: Regex representing the format of a valid ticket number. Default
-        #: format is 1 or more letters, then a hyphen, then 1 or more numbers.
-        #: To allow any format, set to '.*'.
-        #:
-        #: (Default: '[a-zA-Z]+-[0-9]+')
+        # ticketInputFormatRegex
+        self.TICKET_INPUT_FORMAT_REGEX_DOC = textwrap.dedent(
+            '''\
+            Regex representing the format of a valid ticket number. Default
+            format is 1 or more letters, then a hyphen, then 1 or more numbers.
+            To allow any format, set to '.*'.
+
+            (Default: '[a-zA-Z]+-[0-9]+')
+            ''')
         self.TICKET_INPUT_FORMAT_REGEX = self.get_workflow_config(
             'ticketInputFormatRegex', default='[a-zA-Z]+-[0-9]+'
         )
-        #: If true, letters in the ticket number will be capitalized after
-        #: validation.
-        #: (Default: true)
+        # ticketFormatCapitalize
+        self.TICKET_FORMAT_CAPITALIZE_DOC = textwrap.dedent(
+            '''\
+            If true, letters in the ticket number will be capitalized after
+            validation.
+
+            (Default: true)
+            ''')
         self.TICKET_FORMAT_CAPITALIZE = self.get_workflow_config(
             'ticketFormatCapitalize', default=True,
             config_type=self.TYPE_BOOL
         )
+        # END CONFIGS ==========================================================
 
     def get_workflow_config(self, key, default=None,
                             config_type=None, data_type=None,

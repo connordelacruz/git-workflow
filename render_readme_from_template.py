@@ -9,10 +9,12 @@ from contextlib import redirect_stdout
 from io import StringIO
 import os
 import sys
+from git import Repo
 import jinja2
 from git_workflow.__about__ import *
 from git_workflow.__main__ import get_parser
 from git_workflow.workflow import commands
+from git_workflow.utils.configs import Configs
 
 
 RST_INDENT = ' ' * 4
@@ -30,6 +32,7 @@ def main():
             'command': __command__,
         },
     }
+    # Get command info
     parser = get_parser(prog='workflow')
     for command, command_class in commands.items():
         context[command.replace('-', '_')] = {
@@ -37,6 +40,13 @@ def main():
             'desc': command_class.description,
             'help': get_command_help(parser, command_class),
         }
+    # Get config docs
+    # TODO
+    repo = Repo(os.getcwd())
+    configs = Configs(repo, no_init=True)
+    context['configs'] = {
+        doc.replace('_DOC', ''): getattr(configs, doc) for doc in dir(configs) if doc.endswith('_DOC')
+    }
     # Render .j2 template to file
     project_root = os.path.dirname(os.path.abspath(__file__))
     readme_path = os.path.join(project_root, 'README.rst')
