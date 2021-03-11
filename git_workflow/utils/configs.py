@@ -34,40 +34,70 @@ class Configs:
 
         # User Details ---------------------------------------------------------
         # initials
-        self.INITIALS_DOC = (
-            'User initials.'
-        )
+        self.INITIALS_DOC = textwrap.dedent(
+            '''\
+            The user's initials.
+
+            If set, ``workflow start`` will skip the prompt for your initials and use this value.
+
+            **E.g.:** To set your initials to "cd":
+
+            ::
+
+                git config --global workflow.initials cd
+            ''')
         self.INITIALS = self.get_workflow_config('initials')
 
         # Branches -------------------------------------------------------------
         # baseBranch
         self.BASE_BRANCH_DOC = textwrap.dedent(
             '''\
-            Base branch.
-            (Default: 'master')
+            **Default:** ``master``
+
+            Branch to use as a base when creating a new branch using ``workflow
+            start``.
+
+            **E.g.:** To base branches off of ``develop``:
+
+            ::
+
+                git config workflow.baseBranch develop
             ''')
         self.BASE_BRANCH = self.get_workflow_config(
             'baseBranch', default='master'
         )
         # badBranchNamePatterns
-        self.BAD_BRANCH_NAME_PATTERNS_DOC = (
-            'Space-separated list of words that should not appear in a branch name.'
-        )
+        self.BAD_BRANCH_NAME_PATTERNS_DOC = textwrap.dedent(
+            '''\
+            Set to a **space-separated** string of phrases or patterns that
+            should not appear in a standard branch name. If set, ``workflow
+            start`` will check for these before attempting to create a new
+            branch.
+
+            **E.g.:** if standard branch names shouldn't include the words
+            ``-web`` or ``-plugins``:
+
+            ::
+
+                git config workflow.badBranchNamePatterns "-web -plugins"
+            ''')
         self.BAD_BRANCH_NAME_PATTERNS = self.get_workflow_config(
             'badBranchNamePatterns',
             data_type=self.DATA_TYPE_LIST
         )
 
         # Commit Templates -----------------------------------------------------
+        # TODO Document examples?
         # commitTemplateFormat
         self.COMMIT_TEMPLATE_FORMAT_DOC = textwrap.dedent(
             '''\
-            Format of commit template body. Supports the following placeholders:
-              {ticket} - Replaced with ticket number
-              {branch} - Replaced with branch name
-              {initials} - Replaced with branch name
+            **Default:** ``'[{ticket}] '``
 
-            (Default: '[{ticket}] ')
+            Format of commit template body. Supports the following placeholders:
+
+              - ``{ticket}``: Replaced with ticket number
+              - ``{branch}``: Replaced with branch name
+              - ``{initials}``: Replaced with user initials (if configured)
             ''')
         self.COMMIT_TEMPLATE_FORMAT = self.get_workflow_config(
             'commitTemplateFormat', default='[{ticket}] '
@@ -75,11 +105,13 @@ class Configs:
         # commitTemplateFilenameFormat
         self.COMMIT_TEMPLATE_FILENAME_FORMAT_DOC = textwrap.dedent(
             '''\
-            Format of commit template filenames. Supports same placeholders as
-            commitTemplateFormat.
-            NOTE: Resulting filenames will always begin with '.gitmessage_local_'.
+            **Default:** ``'{ticket}_{branch}'``
 
-            (Default: '{ticket}_{branch}')
+            Format of commit template filenames. Supports same placeholders as
+            ``workflow.commitTemplateFormat``.
+
+            **NOTE:** Resulting filenames will always begin with
+            ``'.gitmessage_local_'``.
             ''')
         self.COMMIT_TEMPLATE_FILENAME_FORMAT = self.get_workflow_config(
             'commitTemplateFilenameFormat', default='{ticket}_{branch}'
@@ -87,11 +119,12 @@ class Configs:
         # unsetTemplateConfirmationPrompt
         self.UNSET_TEMPLATE_CONFIRMATION_PROMPT_DOC = textwrap.dedent(
             '''\
-            If true, unset-template will prompt before unsetting unless -f is
-            specified. If false, will not prompt for confirmation unless -i is
-            specified.
+            **Default:** ``true``
 
-            (Default: true)
+            If ``true``, ``workflow unset-template`` will prompt for
+            confirmation before unsetting unless ``-f`` is specified. If
+            ``false``, will not prompt for confirmation unless ``-i`` is
+            specified.
             ''')
         self.UNSET_TEMPLATE_CONFIRMATION_PROMPT = self.get_workflow_config(
             'unsetTemplateConfirmationPrompt', default=True,
@@ -99,14 +132,15 @@ class Configs:
         )
 
         # Ticket Numbers -------------------------------------------------------
+        # TODO Document examples?
         # ticketInputFormatRegex
         self.TICKET_INPUT_FORMAT_REGEX_DOC = textwrap.dedent(
             '''\
+            **Default:** ``'[a-zA-Z]+-[0-9]+'``
+
             Regex representing the format of a valid ticket number. Default
             format is 1 or more letters, then a hyphen, then 1 or more numbers.
-            To allow any format, set to '.*'.
-
-            (Default: '[a-zA-Z]+-[0-9]+')
+            To allow any format, set to ``'.*'``.
             ''')
         self.TICKET_INPUT_FORMAT_REGEX = self.get_workflow_config(
             'ticketInputFormatRegex', default='[a-zA-Z]+-[0-9]+'
@@ -114,10 +148,10 @@ class Configs:
         # ticketFormatCapitalize
         self.TICKET_FORMAT_CAPITALIZE_DOC = textwrap.dedent(
             '''\
-            If true, letters in the ticket number will be capitalized after
-            validation.
+            **Default:** ``true``
 
-            (Default: true)
+            If ``true``, letters in the ticket number will be capitalized after
+            validation.
             ''')
         self.TICKET_FORMAT_CAPITALIZE = self.get_workflow_config(
             'ticketFormatCapitalize', default=True,

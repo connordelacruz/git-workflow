@@ -156,9 +156,11 @@ To ignore generated template files in a single git repo, add the following to th
     .gitmessage_local*
 
 
-Commands
-========
+Workflow Commands
+=================
 .. todo insert sections for remaining commands 
+
+**Usage:** ``workflow <command>``
 
 ``start``
 ---------
@@ -247,3 +249,120 @@ Usage
       -f, --force         Skip confirmation prompt (if configured)
       -c, --confirmation  Prompt for confirmation before unsetting
     
+
+
+Git Configurations
+==================
+
+Workflow commands will use the following git configs if set:
+
+User Details
+------------
+
+``workflow.initials``
+~~~~~~~~~~~~~~~~~~~~~
+
+The user's initials.
+
+If set, ``workflow start`` will skip the prompt for your initials and use this value.
+
+**E.g.:** To set your initials to "cd":
+
+::
+
+    git config --global workflow.initials cd
+
+
+Branches
+--------
+
+``workflow.baseBranch``
+~~~~~~~~~~~~~~~~~~~~~~~
+
+**Default:** ``master``
+
+Branch to use as a base when creating a new branch using ``workflow
+start``.
+
+**E.g.:** To base branches off of ``develop``:
+
+::
+
+    git config workflow.baseBranch develop
+
+
+``workflow.badBranchNamePatterns``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Set to a **space-separated** string of phrases or patterns that
+should not appear in a standard branch name. If set, ``workflow
+start`` will check for these before attempting to create a new
+branch.
+
+**E.g.:** if standard branch names shouldn't include the words
+``-web`` or ``-plugins``:
+
+::
+
+    git config workflow.badBranchNamePatterns "-web -plugins"
+
+
+Commit Templates
+----------------
+
+``workflow.commitTemplateFormat``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Default:** ``'[{ticket}] '``
+
+Format of commit template body. Supports the following placeholders:
+
+  - ``{ticket}``: Replaced with ticket number
+  - ``{branch}``: Replaced with branch name
+  - ``{initials}``: Replaced with user initials (if configured)
+
+
+``workflow.commitTemplateFilenameFormat``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Default:** ``'{ticket}_{branch}'``
+
+Format of commit template filenames. Supports same placeholders as
+``workflow.commitTemplateFormat``.
+
+**NOTE:** Resulting filenames will always begin with
+``'.gitmessage_local_'``.
+
+
+``workflow.unsetTemplateConfirmationPrompt``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Default:** ``true``
+
+If ``true``, ``workflow unset-template`` will prompt for
+confirmation before unsetting unless ``-f`` is specified. If
+``false``, will not prompt for confirmation unless ``-i`` is
+specified.
+
+
+Ticket Numbers
+--------------
+
+``workflow.ticketInputFormatRegex``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Default:** ``'[a-zA-Z]+-[0-9]+'``
+
+Regex representing the format of a valid ticket number. Default
+format is 1 or more letters, then a hyphen, then 1 or more numbers.
+To allow any format, set to ``'.*'``.
+
+
+``workflow.ticketFormatCapitalize``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Default:** ``true``
+
+If ``true``, letters in the ticket number will be capitalized after
+validation.
+

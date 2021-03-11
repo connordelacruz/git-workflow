@@ -156,8 +156,8 @@ To ignore generated template files in a single git repo, add the following to th
     .gitmessage_local*
 
 
-Commands
-========
+Workflow Commands
+=================
 .. todo insert sections for remaining commands 
 {# Formats RST header for a command #}
 {% macro command_header(command) -%}
@@ -173,6 +173,8 @@ Usage
 
     {{help_text}}
 {%- endmacro %}
+
+**Usage:** ``workflow <command>``
 
 {# --- start --- #}
 {{ command_header(start.command) }}
@@ -190,4 +192,62 @@ Usage
 {{ command_header(unset_template.command) }}
 
 {{ command_usage(unset_template.help) }}
+
+
+Git Configurations
+==================
+
+Workflow commands will use the following git configs if set:
+
+User Details
+------------
+
+``workflow.initials``
+~~~~~~~~~~~~~~~~~~~~~
+
+{{ configs.INITIALS }}
+
+Branches
+--------
+
+``workflow.baseBranch``
+~~~~~~~~~~~~~~~~~~~~~~~
+
+{{ configs.BASE_BRANCH }}
+
+``workflow.badBranchNamePatterns``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+{{ configs.BAD_BRANCH_NAME_PATTERNS }}
+
+Commit Templates
+----------------
+
+``workflow.commitTemplateFormat``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+{{ configs.COMMIT_TEMPLATE_FORMAT }}
+
+``workflow.commitTemplateFilenameFormat``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+{{ configs.COMMIT_TEMPLATE_FILENAME_FORMAT }}
+
+``workflow.unsetTemplateConfirmationPrompt``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+{{ configs.UNSET_TEMPLATE_CONFIRMATION_PROMPT }}
+
+Ticket Numbers
+--------------
+
+``workflow.ticketInputFormatRegex``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+{{ configs.TICKET_INPUT_FORMAT_REGEX }}
+
+``workflow.ticketFormatCapitalize``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+{{ configs.TICKET_FORMAT_CAPITALIZE }}
 
