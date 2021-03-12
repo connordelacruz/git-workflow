@@ -222,9 +222,9 @@ Usage
 Configs
 ~~~~~~~
 
-- ```workflow.initials```_
-- ```workflow.baseBranch```_
-- ```workflow.badBranchNamePatterns```_
+- `workflow.initials`_
+- `workflow.baseBranch`_
+- `workflow.badBranchNamePatterns`_
 
 
 ``set-template``
