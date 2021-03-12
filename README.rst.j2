@@ -179,6 +179,8 @@ Usage
 Configs
 ~~~~~~~
 
+Command uses the following configs:
+
 {% for config_name in command.configs_used %}
 - `workflow.{{config_name}}`_
 {% endfor %}
@@ -199,14 +201,20 @@ Configs
 {# --- set-template --- #}
 {{ command_header(set_template.command) }}
 
+{{ set_template.doc }}
+
 {{ command_usage(set_template.help) }}
 
+{{ command_configs(set_template) }}
 
 {# --- unset-template --- #}
 {{ command_header(unset_template.command) }}
 
+{{ unset_template.doc }}
+
 {{ command_usage(unset_template.help) }}
 
+{{ command_configs(unset_template) }}
 
 Git Configurations
 ==================

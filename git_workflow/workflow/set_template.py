@@ -4,9 +4,37 @@ from .base import WorkflowBase
 
 
 class SetTemplate(WorkflowBase):
-    """Create and configure commit template."""
+    """\
+    Create and configure commit template for the current branch.
+
+    By default, the commit template includes the specified ticket number before
+    the commit message. E.g. for ticket number ``AB-12345``:
+
+    ::
+
+        [AB-12345] <commit message text starts here>
+
+    The commit template file will be created in the root of the git repository.
+    By default, the filename will be in this format:
+
+    ::
+
+        .gitmessage_local_<ticket>_<branch>
+
+    The format of the filename, commit template body, accepted ticket numbers,
+    and more can be customized with git configs (see the Configs section below
+    for details).
+    """
     command = 'set-template'
     description = 'Configure git commit template for a branch.'
+    configs_used = [
+        'commitTemplateFilenameFormat',
+        'commitTemplateFormat',
+        'ticketInputFormatRegex',
+        'ticketFormatCapitalize',
+        'ticketInputFormatRegex',
+        'initials',
+    ]
 
     @classmethod
     def add_subparser(cls, subparsers, generic_parent_parser):

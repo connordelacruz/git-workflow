@@ -222,6 +222,8 @@ Usage
 Configs
 ~~~~~~~
 
+Command uses the following configs:
+
 - `workflow.initials`_
 - `workflow.baseBranch`_
 - `workflow.badBranchNamePatterns`_
@@ -229,6 +231,27 @@ Configs
 
 ``set-template``
 ----------------
+
+Create and configure commit template for the current branch.
+
+By default, the commit template includes the specified ticket number before
+the commit message. E.g. for ticket number ``AB-12345``:
+
+::
+
+    [AB-12345] <commit message text starts here>
+
+The commit template file will be created in the root of the git repository.
+By default, the filename will be in this format:
+
+::
+
+    .gitmessage_local_<ticket>_<branch>
+
+The format of the filename, commit template body, accepted ticket numbers,
+and more can be customized with git configs (see the Configs section below
+for details).
+
 
 Usage
 ~~~~~
@@ -247,9 +270,27 @@ Usage
       <ticket>       Ticket number to use in commit template
     
 
+Configs
+~~~~~~~
+
+Command uses the following configs:
+
+- `workflow.commitTemplateFilenameFormat`_
+- `workflow.commitTemplateFormat`_
+- `workflow.ticketInputFormatRegex`_
+- `workflow.ticketFormatCapitalize`_
+- `workflow.ticketInputFormatRegex`_
+- `workflow.initials`_
+
 
 ``unset-template``
 ------------------
+
+Remove commmit template for a branch.
+
+By default, this command will prompt for confirmation before removing the
+commit template unless ``--force`` is specified.
+
 
 Usage
 ~~~~~
@@ -273,6 +314,13 @@ Usage
       -f, --force         Skip confirmation prompt (if configured)
       -c, --confirmation  Prompt for confirmation before unsetting
     
+
+Configs
+~~~~~~~
+
+Command uses the following configs:
+
+- `workflow.unsetTemplateConfirmationPrompt`_
 
 
 Git Configurations

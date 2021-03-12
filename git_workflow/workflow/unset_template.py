@@ -5,10 +5,16 @@ from .base import WorkflowBase
 
 
 class UnsetTemplate(WorkflowBase):
-    """Unset configs for commmit template."""
+    """\
+    Remove commmit template for a branch.
+
+    By default, this command will prompt for confirmation before removing the
+    commit template unless ``--force`` is specified.
+    """
 
     command = 'unset-template'
     description = 'Remove commit template for a branch.'
+    configs_used = ['unsetTemplateConfirmationPrompt',]
 
     @classmethod
     def add_subparser(cls, subparsers, generic_parent_parser):
