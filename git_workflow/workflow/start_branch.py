@@ -7,9 +7,27 @@ from .set_template import SetTemplate
 
 
 class StartBranch(WorkflowBase):
-    """Create a new branch."""
+    """\
+    Create a new branch with the following name format:
+
+    ::
+
+        [<client>-]<brief-description>-<yyyymmdd>-<initials>
+
+    Where:
+
+    - ``<client>`` - (Optional) Client's name
+    - ``<brief-description>`` - Description of the work
+    - ``<yyyymmdd>`` - Today's date
+    - ``<initials>`` - Engineer's initials
+
+    Script will prompt for details and format appropriately (i.e. no
+    spaces/underscores, all lowercase).
+    """
+
     command = 'start'
     description = 'Create a new branch.'
+    configs_used = ['initials', 'baseBranch', 'badBranchNamePatterns']
 
     @classmethod
     def add_subparser(cls, subparsers, generic_parent_parser):

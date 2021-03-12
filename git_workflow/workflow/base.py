@@ -21,6 +21,9 @@ class WorkflowBase(ABC):
         self.verbosity = verbosity
         self.configs = Configs(self.repo)
 
+    #: Names of git configs used in this command
+    configs_used = []
+
     # Abstract Properties and Methods
 
     @property

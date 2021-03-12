@@ -9,6 +9,7 @@ from contextlib import redirect_stdout
 from io import StringIO
 import os
 import sys
+import textwrap
 from git import Repo
 import jinja2
 from git_workflow.__about__ import *
@@ -38,10 +39,11 @@ def main():
         context[command.replace('-', '_')] = {
             'command': command_class.command,
             'desc': command_class.description,
+            'doc': textwrap.dedent(command_class.__doc__),
             'help': get_command_help(parser, command_class),
+            'configs_used': command_class.configs_used,
         }
     # Get config docs
-    # TODO
     repo = Repo(os.getcwd())
     configs = Configs(repo, no_init=True)
     context['configs'] = {

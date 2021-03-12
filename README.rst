@@ -165,6 +165,23 @@ Workflow Commands
 ``start``
 ---------
 
+Create a new branch with the following name format:
+
+::
+
+    [<client>-]<brief-description>-<yyyymmdd>-<initials>
+
+Where:
+
+- ``<client>`` - (Optional) Client's name
+- ``<brief-description>`` - Description of the work
+- ``<yyyymmdd>`` - Today's date
+- ``<initials>`` - Engineer's initials
+
+Script will prompt for details and format appropriately (i.e. no
+spaces/underscores, all lowercase).
+
+
 Usage
 ~~~~~
 
@@ -201,6 +218,13 @@ Usage
                             Use currently checked out branch as base (overrides -b)
       -P, --no-pull         Skip pulling changes to base branch.
     
+
+Configs
+~~~~~~~
+
+- ```workflow.initials```_
+- ```workflow.baseBranch```_
+- ```workflow.badBranchNamePatterns```_
 
 
 ``set-template``

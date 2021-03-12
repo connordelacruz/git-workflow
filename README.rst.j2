@@ -173,14 +173,28 @@ Usage
 
     {{help_text}}
 {%- endmacro %}
+{# Details on configs #}
+{% macro command_configs(command) -%}
+{% if command.configs_used|length > 0 %}
+Configs
+~~~~~~~
+
+{% for config_name in command.configs_used %}
+- ```workflow.{{config_name}}```_
+{% endfor %}
+{% endif %}
+{%- endmacro %}
 
 **Usage:** ``workflow <command>``
 
 {# --- start --- #}
 {{ command_header(start.command) }}
 
+{{ start.doc }}
+
 {{ command_usage(start.help) }}
 
+{{ command_configs(start) }}
 
 {# --- set-template --- #}
 {{ command_header(set_template.command) }}
