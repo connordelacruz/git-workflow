@@ -166,6 +166,7 @@ class StartBranch(WorkflowBase):
                 self.check_branch_name(branch_name)
         # Checkout base_branch
         base_branch = args['base_branch']
+        # TODO support tags with 'refs/tags/'; maybe --release/-r arg
         base = Head(self.repo, 'refs/heads/' + base_branch)
         if self.repo.active_branch != base:
             base.checkout()
