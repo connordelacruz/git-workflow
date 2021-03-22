@@ -1,4 +1,4 @@
 """Git workflow tools."""
-from . import __about__
-from . import utils
-from . import workflow
+from git_workflow import __about__
+from git_workflow import utils
+from git_workflow import workflow
