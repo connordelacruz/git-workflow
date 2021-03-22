@@ -3,8 +3,9 @@ import os
 import sys
 from git import Repo
 from git.exc import InvalidGitRepositoryError, NoSuchPathError
-from git_workflow import utils, workflow
 from git_workflow.__about__ import __version__
+from git_workflow.utils import cmd, repository
+from git_workflow.workflow import add_command_subparsers, run_command
 
 
 def get_generic_parent_parser():
@@ -42,7 +43,7 @@ def get_parser(prog=None):
     subparsers = parser.add_subparsers(title='Commands',
                                        description=f"Run '{parser.prog} <command> --help' for details",
                                        dest='command', metavar='<command>')
-    workflow.add_command_subparsers(subparsers, generic_parent_parser)
+    add_command_subparsers(subparsers, generic_parent_parser)
     return parser
 
 
@@ -50,30 +51,30 @@ def main():
     # Check installed git version
     # TODO allow limited functionality for lower git versions in future update?
     try:
-        min_git_version_met = utils.repository.verify_git_version()
+        min_git_version_met = repository.verify_git_version()
     except Exception as e:
-        utils.cmd.print_error(e)
+        cmd.print_error(e)
         return
     # Initialize Repo object
     repo = None
     try:
         repo = Repo(os.getcwd(), search_parent_directories=True)
     except InvalidGitRepositoryError as e:
-        utils.cmd.print_error('No git repo found: {}'.format(e))
+        cmd.print_error('No git repo found: {}'.format(e))
     except NoSuchPathError as e:
-        utils.cmd.print_error('Invalid path: {}'.format(e))
+        cmd.print_error('Invalid path: {}'.format(e))
     finally:
         if repo is None:
             return
     # Argument Parser
     parser = get_parser()
     try:
-        workflow.run_command(repo, parser)
+        run_command(repo, parser)
     except KeyboardInterrupt:
         print('')
         sys.exit(0)
     except Exception as e:
-        utils.cmd.print_error(e)
+        cmd.print_error(e)
         sys.exit(1)
 
 
