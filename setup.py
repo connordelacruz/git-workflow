@@ -1,5 +1,5 @@
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 
 base_path = os.path.dirname(os.path.abspath(__file__))
 # Get metadata
@@ -34,7 +34,7 @@ setup(
         'Topic :: Software Development',
         'Development Status :: 3 - Alpha',
     ],
-    packages=['git_workflow'],
+    packages=find_packages(),
     entry_points={
         'console_scripts': [
             about['__command__'] + ' = git_workflow.__main__:main',
