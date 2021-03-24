@@ -102,19 +102,11 @@ To install an updated version of ``git`` on macOS using `Homebrew <https://brew.
 Installation
 ------------
 
-Once you have the above prerequisites installed, clone this repo, then install it using ``pip`` (or ``pip3`` depending on how you installed Python 3):
+Once you have the above prerequisites installed, you can install it using ``pip`` (or ``pip3`` depending on how you installed Python 3):
 
 ::
 
-    git clone https://github.com/connordelacruz/git-workflow.git
-    cd git-workflow
-    pip install -e .
-
-.. note::
-
-    Planning on adding this to `PyPI <https://pypi.org/>`_ once the basic
-    functionality is complete. After that, you will be able to install it by
-    running ``pip install git-workflow``.
+    pip install git-workflow
 
 
 Configure Git to Ignore Commit Template Files
