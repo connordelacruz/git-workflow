@@ -430,3 +430,32 @@ To allow any format, set to ``'.*'``.
 If ``true``, letters in the ticket number will be capitalized after
 validation.
 
+
+Future Updates
+==============
+
+Implement Remaining Core Commands
+---------------------------------
+
+Implement the remaining commands from the original `bash scripts <https://github.com/connordelacruz/git-workflow-scripts>`_:
+
+- ``workflow finish``: Remove the commit template and delete a project branch.
+- ``workflow cleanup``: Tidy up workflow-related files and configs.
+
+New Commands
+------------
+
+- ``workflow rename``: Rename a branch while maintaining its current commit template.
+
+Enhancements
+------------
+
+- Support ``--verbosity`` argument on all commands.
+- Support using a git tag for a base instead of a branch with ``workflow start``.
+- Support command tab completion with `argcomplete <https://kislyuk.github.io/argcomplete/>`_.
+
+Documentation
+-------------
+
+- Add demo GIFs of commands in action to README.
+- Generate API docs using Sphinx.
