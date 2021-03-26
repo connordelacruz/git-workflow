@@ -194,7 +194,8 @@ class StartBranch(WorkflowBase):
         if args['ticket']:
             self.print('Checking ticket number format...')
             set_template_parsed_args = self.parser.parse_args([SetTemplate.command, args['ticket']])
-            set_template = SetTemplate(self.repo, self.parser, parsed_args=set_template_parsed_args,
+            set_template = SetTemplate(self.repo, self.parser,
+                                       parsed_args=set_template_parsed_args,
                                        verbosity=self.verbosity)
             set_template.run()
 

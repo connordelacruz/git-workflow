@@ -2,10 +2,12 @@
 from .start_branch import StartBranch
 from .set_template import SetTemplate
 from .unset_template import UnsetTemplate
+from .finish_branch import FinishBranch
 
 #: Maps command names to WorkflowBase subclasses
 commands = {
     StartBranch.command: StartBranch,
+    FinishBranch.command: FinishBranch,
     SetTemplate.command: SetTemplate,
     UnsetTemplate.command: UnsetTemplate,
 }
