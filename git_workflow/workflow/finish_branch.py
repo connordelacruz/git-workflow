@@ -5,11 +5,21 @@ from .unset_template import UnsetTemplate
 
 
 class FinishBranch(WorkflowBase):
-    """TODO"""
+    """\
+    Finish a project branch.
+
+    By default, this command will prompt for confirmation unless ``--force`` is
+    specified. Once confirmed, this command will:
+
+    - Unset the commit template of the project branch
+    - Checkout the base branch and pull latest updates
+    - Attempt to delete the project branch using ``git branch -d``, which may
+      fail if the project branch has not been fully merged
+    """
 
     command = 'finish'
     description = 'Finish a project branch.'
-    configs_used = ['finishBranchConfirmationPrompt']
+    configs_used = ['baseBranch', 'finishBranchConfirmationPrompt']
 
     @classmethod
     def add_subparser(cls, subparsers, generic_parent_parser):

@@ -32,11 +32,18 @@ If you provide a ticket number, this will create a git commit message template f
     
     [<ticket#>] 
 
-..
-    TODO
-    Finish a Branch
-    ---------------
-    Doc when implemented, include demos
+Finish a Branch
+---------------
+
+.. todo DEMOS
+
+When you're finished with a project branch that has been merged, run:
+
+::
+
+    workflow finish
+
+This will clean up configs, remove the branch's commit template, and delete the branch.
 
 Create a Commit Template for an Existing Branch
 -----------------------------------------------
@@ -219,6 +226,52 @@ Command uses the following configs:
 - `workflow.initials`_
 - `workflow.baseBranch`_
 - `workflow.badBranchNamePatterns`_
+
+
+``finish``
+----------
+
+Finish a project branch.
+
+By default, this command will prompt for confirmation unless ``--force`` is
+specified. Once confirmed, this command will:
+
+- Unset the commit template of the project branch
+- Checkout the base branch and pull latest updates
+- Attempt to delete the project branch using ``git branch -d``, which may
+  fail if the project branch has not been fully merged
+
+
+Usage
+~~~~~
+
+::
+
+    usage: workflow finish [-h] [-V] [-f | -c] [<branch>]
+    
+    Finish a project branch.
+    
+    General:
+      -h, --help          Show this help message and exit
+      -V, --version       Show version number and exit
+    
+    Positional Arguments:
+      <branch>            Branch to finish (default: current)
+    
+    Confirmation Prompt Arguments:
+      Override workflow.finishBranchConfirmationPrompt config.
+    
+      -f, --force         Skip confirmation prompt (if configured)
+      -c, --confirmation  Prompt for confirmation before deleting
+    
+
+Configs
+~~~~~~~
+
+Command uses the following configs:
+
+- `workflow.baseBranch`_
+- `workflow.finishBranchConfirmationPrompt`_
 
 
 ``set-template``

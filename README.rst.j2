@@ -32,11 +32,18 @@ If you provide a ticket number, this will create a git commit message template f
     
     [<ticket#>] 
 
-..
-    TODO
-    Finish a Branch
-    ---------------
-    Doc when implemented, include demos
+Finish a Branch
+---------------
+
+.. todo DEMOS
+
+When you're finished with a project branch that has been merged, run:
+
+::
+
+    {{workflow.command}} {{finish.command}}
+
+This will clean up configs, remove the branch's commit template, and delete the branch.
 
 Create a Commit Template for an Existing Branch
 -----------------------------------------------
@@ -189,6 +196,15 @@ Command uses the following configs:
 {{ command_usage(start.help) }}
 
 {{ command_configs(start) }}
+
+{# --- finish --- #}
+{{ command_header(finish.command) }}
+
+{{ finish.doc }}
+
+{{ command_usage(finish.help) }}
+
+{{ command_configs(finish) }}
 
 {# --- set-template --- #}
 {{ command_header(set_template.command) }}
