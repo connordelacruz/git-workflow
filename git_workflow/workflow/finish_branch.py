@@ -5,11 +5,11 @@ from .unset_template import UnsetTemplate
 
 
 class FinishBranch(WorkflowBase):
-    # TODO DOC
+    """TODO"""
 
     command = 'finish'
     description = 'Finish a project branch.'
-    # TODO configs?
+    configs_used = ['finishBranchConfirmationPrompt']
 
     @classmethod
     def add_subparser(cls, subparsers, generic_parent_parser):
@@ -17,7 +17,7 @@ class FinishBranch(WorkflowBase):
             cls.command, description=cls.description, help=cls.description,
             parents=[generic_parent_parser], add_help=False
         )
-        # TODO: branch, force/confirmation, no_pull? -D?
+        # TODO: no_pull? -D?
         # Specify branch
         positional_args = finish_subparser.add_argument_group(
             'Positional Arguments'
@@ -27,14 +27,30 @@ class FinishBranch(WorkflowBase):
             help='Branch to finish (default: current)',
             default=None
         )
+        # Confirmation prompt
+        confirmation_args = finish_subparser.add_argument_group(
+            'Confirmation Prompt Arguments',
+            'Override workflow.finishBranchConfirmationPrompt config.'
+        )
+        confirmation_group = confirmation_args.add_mutually_exclusive_group()
+        confirmation_group.add_argument(
+            '-f', '--force', help='Skip confirmation prompt (if configured)',
+            dest='confirm', action='store_false', default=None
+        )
+        confirmation_group.add_argument(
+            '-c', '--confirmation', help='Prompt for confirmation before deleting',
+            dest='confirm', action='store_true', default=None
+        )
 
     def get_args(self):
         args = {}
         args['branch'] = (self.parsed_args.branch
                           if self.parsed_args.branch is not None else
                           self.repo.active_branch.name)
-        # TODO use args/configs
-        args['confirm'] = True
+        # Default to config value unless otherwise specified
+        args['confirm'] = (self.configs.FINISH_BRANCH_CONFIRMATION_PROMPT
+                           if self.parsed_args.confirm is None else
+                           self.parsed_args.confirm)
         return args
 
     def run(self):

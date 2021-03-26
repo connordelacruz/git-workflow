@@ -371,6 +371,16 @@ branch.
     git config workflow.badBranchNamePatterns "-web -plugins"
 
 
+``workflow.finishBranchConfirmationPrompt``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Default:** ``true``
+
+If ``true``, ``workflow finish`` will prompt for confirmation
+before unsetting unless ``-f`` is specified. If ``false``, will 
+not prompt for confirmation unless ``-c`` is specified.
+
+
 Commit Templates
 ----------------
 
@@ -405,7 +415,7 @@ Format of commit template filenames. Supports same placeholders as
 
 If ``true``, ``workflow unset-template`` will prompt for
 confirmation before unsetting unless ``-f`` is specified. If
-``false``, will not prompt for confirmation unless ``-i`` is
+``false``, will not prompt for confirmation unless ``-c`` is
 specified.
 
 

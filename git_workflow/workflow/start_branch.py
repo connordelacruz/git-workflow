@@ -167,17 +167,17 @@ class StartBranch(WorkflowBase):
         # Checkout base_branch
         base_branch = args['base_branch']
         # TODO support tags with 'refs/tags/'; maybe --release/-r arg
-        base = Head(self.repo, 'refs/heads/' + base_branch)
-        if self.repo.active_branch != base:
-            base.checkout()
+        base_head = Head(self.repo, f'refs/heads/{base_branch}')
+        if self.repo.active_branch != base_head:
+            base_head.checkout()
         # Update
-        if not args['no_pull'] and base.tracking_branch():
+        if not args['no_pull'] and base_head.tracking_branch():
             self.print(f'Pulling updates to {base_branch}...')
-            remote_name = base.tracking_branch().remote_name
+            remote_name = base_head.tracking_branch().remote_name
             remote = Remote(self.repo, remote_name)
-            base_commit = base.commit
+            base_commit = base_head.commit
             for fetch_info in remote.pull():
-                if fetch_info.ref == base.tracking_branch():
+                if fetch_info.ref == base_head.tracking_branch():
                     if fetch_info.commit != base_commit:
                         self.print(f'Updated {base_branch} to {fetch_info.commit.hexsha}')
                     else:
@@ -185,7 +185,7 @@ class StartBranch(WorkflowBase):
             self.print('')
         # Checkout new branch
         self.print(f'Creating new branch {branch_name}...')
-        new_active_branch = base.checkout(b=branch_name)
+        new_active_branch = base_head.checkout(b=branch_name)
         if new_active_branch.name == branch_name:
             self.print_success('Branch created.', '')
         else:

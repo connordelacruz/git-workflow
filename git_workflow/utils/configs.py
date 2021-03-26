@@ -85,6 +85,19 @@ class Configs:
             'badBranchNamePatterns',
             data_type=self.DATA_TYPE_LIST
         )
+        # finishBranchConfirmationPrompt
+        self.FINISH_BRANCH_CONFIRMATION_PROMPT_DOC = textwrap.dedent(
+            '''\
+            **Default:** ``true``
+
+            If ``true``, ``workflow finish`` will prompt for confirmation
+            before unsetting unless ``-f`` is specified. If ``false``, will 
+            not prompt for confirmation unless ``-c`` is specified.
+            ''')
+        self.FINISH_BRANCH_CONFIRMATION_PROMPT = self.get_workflow_config(
+            'finishBranchConfirmationPrompt', default=True,
+            config_type=self.TYPE_BOOL
+        )
 
         # Commit Templates -----------------------------------------------------
         # TODO Document examples?
@@ -123,7 +136,7 @@ class Configs:
 
             If ``true``, ``workflow unset-template`` will prompt for
             confirmation before unsetting unless ``-f`` is specified. If
-            ``false``, will not prompt for confirmation unless ``-i`` is
+            ``false``, will not prompt for confirmation unless ``-c`` is
             specified.
             ''')
         self.UNSET_TEMPLATE_CONFIRMATION_PROMPT = self.get_workflow_config(
