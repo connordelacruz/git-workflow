@@ -205,7 +205,7 @@ class Configs:
             print(f'{config}: "{value}"')
         return value
 
-    def _call_config_command(self, *args, **kwargs):
+    def call_config_command(self, *args, **kwargs):
         """Wrapper around repo.git.config(). Catches GitCommandError and
         returns None if unsuccessful. Passes all positional and keyword
         arguments to config().
@@ -218,10 +218,10 @@ class Configs:
         return value
 
     def get_config(self, *args, **kwargs):
-        return self._call_config_command(*args, get=True, **kwargs)
+        return self.call_config_command(*args, get=True, **kwargs)
 
     def unset_config(self, *args, **kwargs):
-        return self._call_config_command(*args, unset=True, **kwargs)
+        return self.call_config_command(*args, unset=True, **kwargs)
 
     @classmethod
     def convert_config_value(cls, string_val, data_type):
