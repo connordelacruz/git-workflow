@@ -31,7 +31,40 @@ class Cleanup(WorkflowBase):
     def run(self):
         args = self.get_args()
         targets = self.find_cleanup_targets()
-        # TODO handle include_current_branch
+        orphans = targets.pop('orphans', [])
+        # Pop current branch's configs if we shouldn't include it
+        if not args['include_current_branch']:
+            current_branch = targets.pop(self.repo.active_branch.name, None)
+        # Otherwise keep track of it for messaging
+        else:
+            current_branch = targets.get(self.repo.active_branch.name, None)
+        # Output: Configured Templates
+        if not args['orphans_only']:
+            # Case 1: We have branches to clean
+            if targets:
+                self.print('Commit templates will be unset for the following branches:',
+                           '',
+                           *targets.keys(),
+                           '')
+                if args['include_current_branch'] and current_branch:
+                    self.print_warning('This includes the branch you are currently on!',
+                                       '')
+            # Case 2: Nothing to clean but current branch has a template
+            elif current_branch:
+                self.print('Only branch with a template configured is the current branch.')
+                self.print('To include the current branch, use --include-current-branch argument.',
+                           '')
+        # Output: Orphans
+        if orphans:
+            self.print('The following commit templates do not have an associated branch and will be deleted:',
+                       '',
+                       *orphans,
+                       '')
+        # Output: Nothing to clean up
+        if (not targets or args['orphans_only']) and (not orphans):
+            self.print('Nothing to clean up.')
+            return
+        # TODO: CONFIRMATION AND CLEANUP
 
     # Helper Methods
 
