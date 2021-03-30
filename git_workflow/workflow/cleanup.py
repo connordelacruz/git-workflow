@@ -38,7 +38,7 @@ class Cleanup(WorkflowBase):
         # Otherwise keep track of it for messaging
         else:
             current_branch = targets.get(self.repo.active_branch.name, None)
-        # Output: Configured Templates
+        # Output: Configured Templates (unless --orphans-only)
         if not args['orphans_only']:
             # Case 1: We have branches to clean
             if targets:
@@ -64,7 +64,42 @@ class Cleanup(WorkflowBase):
         if (not targets or args['orphans_only']) and (not orphans):
             self.print('Nothing to clean up.')
             return
-        # TODO: CONFIRMATION AND CLEANUP
+        # Confirmation
+        if args['confirm']:
+            confirmation = cmd.prompt(
+                'Confirm (y/n)',
+                'Would you like to continue?',
+                default_val='n', validate_function=cmd.validate_yn
+            )
+            if not confirmation:
+                return
+        # Unset Configured Templates
+        if not args['orphans_only'] and targets:
+            self.print('Unsetting configured templates...')
+            for branch_name in targets.keys():
+                unset_template_parsed_args = self.parser.parse_args([UnsetTemplate.command, branch_name, '--force'])
+                unset_template = UnsetTemplate(self.repo, self.parser,
+                                               parsed_args=unset_template_parsed_args,
+                                               # TODO match verbosity if > 1?
+                                               verbosity=0)
+                unset_template.run()
+                self.print_success(f'{branch_name} template unset.')
+            self.print('')
+        # Delete Orphans
+        if orphans:
+            self.print('Removing orphan templates...')
+            repo_root_dir = os.path.dirname(self.repo.git_dir)
+            for orphan in orphans:
+                orphan_path = os.path.join(repo_root_dir, orphan)
+                # NOTE: Probably don't need this exists() check since find_cleanup_targets()
+                # builds this list based on the files it finds, but doing it just to be safe
+                if os.path.exists(orphan_path):
+                    os.remove(orphan_path)
+                    if not os.path.exists(orphan_path):
+                        self.print_success(f'Deleted {orphan}.')
+                    else:
+                        self.print_warning(f'Unable to delete {orphan}.')
+            self.print('')
 
     # Helper Methods
 
