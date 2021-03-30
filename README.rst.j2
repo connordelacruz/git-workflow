@@ -68,12 +68,19 @@ To remove a branch's commit template without deleting the branch, run:
 
     {{workflow.command}} {{unset_template.command}}
 
-..
-    TODO
-    Tidy Up Commit Templates
-    ------------------------
-    Doc when implemented, include demos
 
+Cleanup Commit Templates in a Repo
+----------------------------------
+
+.. todo DEMOS
+
+If you have a bunch of lingering commit templates and would like to tidy up, run:
+
+::
+
+    {{workflow.command}} {{cleanup.command}}
+
+By default, this will clean up configs and template files for every branch except the one you have checked out. It will also look for orphaned commit templates with no associated branch and remove them.
 
 Setup
 =====
@@ -223,6 +230,15 @@ Command uses the following configs:
 {{ command_usage(unset_template.help) }}
 
 {{ command_configs(unset_template) }}
+
+{# --- cleanup --- #}
+{{ command_header(cleanup.command) }}
+
+{{ cleanup.doc }}
+
+{{ command_usage(cleanup.help) }}
+
+{{ command_configs(cleanup) }}
 
 Git Configurations
 ==================

@@ -5,8 +5,21 @@ from git_workflow.utils import cmd
 from .base import WorkflowBase
 from .unset_template import UnsetTemplate
 
+
 class Cleanup(WorkflowBase):
-    """TODO"""
+    """\
+    Tidy up workflow-related files and configs.
+
+    This command will first list all branches and files that will be affected.
+    By default, it will then prompt for confirmation unless ``--force`` is
+    specified. Once confirmed, this command will:
+
+    - Unset the commit templates of all configured branches
+    - Remove any orphan commit template files that have no associated branch
+
+    By default, the current branch is omitted from cleanup unless
+    ``--include-current-branch`` is specified.
+    """
 
     command = 'cleanup'
     description = 'Tidy up workflow-related files and configs.'

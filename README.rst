@@ -68,12 +68,19 @@ To remove a branch's commit template without deleting the branch, run:
 
     workflow unset-template
 
-..
-    TODO
-    Tidy Up Commit Templates
-    ------------------------
-    Doc when implemented, include demos
 
+Cleanup Commit Templates in a Repo
+----------------------------------
+
+.. todo DEMOS
+
+If you have a bunch of lingering commit templates and would like to tidy up, run:
+
+::
+
+    workflow cleanup
+
+By default, this will clean up configs and template files for every branch except the one you have checked out. It will also look for orphaned commit templates with no associated branch and remove them.
 
 Setup
 =====
@@ -366,6 +373,55 @@ Configs
 Command uses the following configs:
 
 - `workflow.unsetTemplateConfirmationPrompt`_
+
+
+``cleanup``
+-----------
+
+Tidy up workflow-related files and configs.
+
+This command will first list all branches and files that will be affected.
+By default, it will then prompt for confirmation unless ``--force`` is
+specified. Once confirmed, this command will:
+
+- Unset the commit templates of all configured branches
+- Remove any orphan commit template files that have no associated branch
+
+By default, the current branch is omitted from cleanup unless
+``--include-current-branch`` is specified.
+
+
+Usage
+~~~~~
+
+::
+
+    usage: workflow cleanup [-h] [-V] [-B] [-o] [-f | -c]
+    
+    Tidy up workflow-related files and configs.
+    
+    General:
+      -h, --help            Show this help message and exit
+      -V, --version         Show version number and exit
+    
+    Cleanup Options:
+      -B, --include-current-branch
+                            Unset template for current branch too
+      -o, --orphans-only    Only clean up templates without a branch
+    
+    Confirmation Prompt Arguments:
+      Override workflow.cleanupConfirmationPrompt config.
+    
+      -f, --force           Skip confirmation prompt (if configured)
+      -c, --confirmation    Prompt for confirmation before cleaning up templates
+    
+
+Configs
+~~~~~~~
+
+Command uses the following configs:
+
+- `workflow.cleanupConfirmationPrompt`_
 
 
 Git Configurations
