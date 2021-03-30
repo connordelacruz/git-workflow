@@ -566,13 +566,6 @@ prompt for confirmation unless ``-c`` is specified.
 Future Updates
 ==============
 
-Implement Remaining Core Commands
----------------------------------
-
-Implement the remaining commands from the original `bash scripts <https://github.com/connordelacruz/git-workflow-scripts>`_:
-
-- ``workflow cleanup``: Tidy up workflow-related files and configs.
-
 New Commands
 ------------
 
