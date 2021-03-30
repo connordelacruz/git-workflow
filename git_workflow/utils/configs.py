@@ -85,19 +85,6 @@ class Configs:
             'badBranchNamePatterns',
             data_type=self.DATA_TYPE_LIST
         )
-        # finishBranchConfirmationPrompt
-        self.FINISH_BRANCH_CONFIRMATION_PROMPT_DOC = textwrap.dedent(
-            '''\
-            **Default:** ``true``
-
-            If ``true``, ``workflow finish`` will prompt for confirmation
-            before unsetting unless ``-f`` is specified. If ``false``, will 
-            not prompt for confirmation unless ``-c`` is specified.
-            ''')
-        self.FINISH_BRANCH_CONFIRMATION_PROMPT = self.get_workflow_config(
-            'finishBranchConfirmationPrompt', default=True,
-            config_type=self.TYPE_BOOL
-        )
 
         # Commit Templates -----------------------------------------------------
         # TODO Document examples?
@@ -129,20 +116,6 @@ class Configs:
         self.COMMIT_TEMPLATE_FILENAME_FORMAT = self.get_workflow_config(
             'commitTemplateFilenameFormat', default='{ticket}_{branch}'
         )
-        # unsetTemplateConfirmationPrompt
-        self.UNSET_TEMPLATE_CONFIRMATION_PROMPT_DOC = textwrap.dedent(
-            '''\
-            **Default:** ``true``
-
-            If ``true``, ``workflow unset-template`` will prompt for
-            confirmation before unsetting unless ``-f`` is specified. If
-            ``false``, will not prompt for confirmation unless ``-c`` is
-            specified.
-            ''')
-        self.UNSET_TEMPLATE_CONFIRMATION_PROMPT = self.get_workflow_config(
-            'unsetTemplateConfirmationPrompt', default=True,
-            config_type=self.TYPE_BOOL
-        )
 
         # Ticket Numbers -------------------------------------------------------
         # TODO Document examples?
@@ -170,6 +143,49 @@ class Configs:
             'ticketFormatCapitalize', default=True,
             config_type=self.TYPE_BOOL
         )
+
+        # Confirmation Prompts -------------------------------------------------
+        # finishBranchConfirmationPrompt
+        self.FINISH_BRANCH_CONFIRMATION_PROMPT_DOC = textwrap.dedent(
+            '''\
+            **Default:** ``true``
+
+            If ``true``, ``workflow finish`` will prompt for confirmation
+            before unsetting unless ``-f`` is specified. If ``false``, will
+            not prompt for confirmation unless ``-c`` is specified.
+            ''')
+        self.FINISH_BRANCH_CONFIRMATION_PROMPT = self.get_workflow_config(
+            'finishBranchConfirmationPrompt', default=True,
+            config_type=self.TYPE_BOOL
+        )
+        # unsetTemplateConfirmationPrompt
+        self.UNSET_TEMPLATE_CONFIRMATION_PROMPT_DOC = textwrap.dedent(
+            '''\
+            **Default:** ``true``
+
+            If ``true``, ``workflow unset-template`` will prompt for
+            confirmation before unsetting unless ``-f`` is specified. If
+            ``false``, will not prompt for confirmation unless ``-c`` is
+            specified.
+            ''')
+        self.UNSET_TEMPLATE_CONFIRMATION_PROMPT = self.get_workflow_config(
+            'unsetTemplateConfirmationPrompt', default=True,
+            config_type=self.TYPE_BOOL
+        )
+        # cleanupConfirmationPrompt
+        self.CLEANUP_CONFIRMATION_PROMPT_DOC = textwrap.dedent(
+            '''\
+            **Default:** ``true``
+
+            If ``true``, ``workflow cleanup`` will prompt for confirmation 
+            before cleaning unless ``-f`` is specified. If ``false``, will not 
+            prompt for confirmation unless ``-c`` is specified.
+            ''')
+        self.CLEANUP_CONFIRMATION_PROMPT = self.get_workflow_config(
+            'cleanupConfirmationPrompt', default=True,
+            config_type=self.TYPE_BOOL
+        )
+
         # END CONFIGS ==========================================================
 
     def get_workflow_config(self, key, default=None,

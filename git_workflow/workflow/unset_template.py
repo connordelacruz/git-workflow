@@ -14,7 +14,7 @@ class UnsetTemplate(WorkflowBase):
 
     command = 'unset-template'
     description = 'Remove commit template for a branch.'
-    configs_used = ['unsetTemplateConfirmationPrompt',]
+    configs_used = ['unsetTemplateConfirmationPrompt']
 
     @classmethod
     def add_subparser(cls, subparsers, generic_parent_parser):

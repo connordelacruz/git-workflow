@@ -424,16 +424,6 @@ branch.
     git config workflow.badBranchNamePatterns "-web -plugins"
 
 
-``workflow.finishBranchConfirmationPrompt``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-**Default:** ``true``
-
-If ``true``, ``workflow finish`` will prompt for confirmation
-before unsetting unless ``-f`` is specified. If ``false``, will 
-not prompt for confirmation unless ``-c`` is specified.
-
-
 Commit Templates
 ----------------
 
@@ -461,17 +451,6 @@ Format of commit template filenames. Supports same placeholders as
 ``'.gitmessage_local_'``.
 
 
-``workflow.unsetTemplateConfirmationPrompt``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-**Default:** ``true``
-
-If ``true``, ``workflow unset-template`` will prompt for
-confirmation before unsetting unless ``-f`` is specified. If
-``false``, will not prompt for confirmation unless ``-c`` is
-specified.
-
-
 Ticket Numbers
 --------------
 
@@ -492,6 +471,40 @@ To allow any format, set to ``'.*'``.
 
 If ``true``, letters in the ticket number will be capitalized after
 validation.
+
+
+Confirmation Prompts
+--------------------
+
+``workflow.finishBranchConfirmationPrompt``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Default:** ``true``
+
+If ``true``, ``workflow finish`` will prompt for confirmation
+before unsetting unless ``-f`` is specified. If ``false``, will
+not prompt for confirmation unless ``-c`` is specified.
+
+
+``workflow.unsetTemplateConfirmationPrompt``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Default:** ``true``
+
+If ``true``, ``workflow unset-template`` will prompt for
+confirmation before unsetting unless ``-f`` is specified. If
+``false``, will not prompt for confirmation unless ``-c`` is
+specified.
+
+
+``workflow.cleanupConfirmationPrompt``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Default:** ``true``
+
+If ``true``, ``workflow cleanup`` will prompt for confirmation 
+before cleaning unless ``-f`` is specified. If ``false``, will not 
+prompt for confirmation unless ``-c`` is specified.
 
 
 Future Updates

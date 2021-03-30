@@ -10,7 +10,7 @@ class Cleanup(WorkflowBase):
 
     command = 'cleanup'
     description = 'Tidy up workflow-related files and configs.'
-    # TODO configs_used = []
+    configs_used = ['cleanupConfirmationPrompt']
 
     @classmethod
     def add_subparser(cls, subparsers, generic_parent_parser):
@@ -18,14 +18,41 @@ class Cleanup(WorkflowBase):
             cls.command, description=cls.description, help=cls.description,
             parents=[generic_parent_parser], add_help=False
         )
-        # TODO confirmation, --include-current-branch, --orphans-only
+        # Cleanup Options
+        cleanup_args = cleanup_subparser.add_argument_group(
+            'Cleanup Options'
+        )
+        cleanup_args.add_argument(
+            '-B', '--include-current-branch', help='Unset template for current branch too',
+            action='store_true', default=False
+        )
+        cleanup_args.add_argument(
+            '-o', '--orphans-only', help='Only clean up templates without a branch',
+            action='store_true', default=False
+        )
+        # Confirmation prompt
+        confirmation_args = cleanup_subparser.add_argument_group(
+            'Confirmation Prompt Arguments',
+            'Override workflow.cleanupConfirmationPrompt config.'
+        )
+        confirmation_group = confirmation_args.add_mutually_exclusive_group()
+        confirmation_group.add_argument(
+            '-f', '--force', help='Skip confirmation prompt (if configured)',
+            dest='confirm', action='store_false', default=None
+        )
+        confirmation_group.add_argument(
+            '-c', '--confirmation', help='Prompt for confirmation before cleaning up templates',
+            dest='confirm', action='store_true', default=None
+        )
 
     def get_args(self):
         args = {}
-        # TODO implement
-        args['confirm'] = True
-        args['include_current_branch'] = False
-        args['orphans_only'] = False
+        args['include_current_branch'] = self.parsed_args.include_current_branch
+        args['orphans_only'] = self.parsed_args.orphans_only
+        # Default to config value unless otherwise specified
+        args['confirm'] = (self.configs.CLEANUP_CONFIRMATION_PROMPT
+                           if self.parsed_args.confirm is None else
+                           self.parsed_args.confirm)
         return args
 
     def run(self):
