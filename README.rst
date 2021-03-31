@@ -12,8 +12,6 @@ This package contains command line tools to streamline common tasks in our git w
 Start New Branch with Commit Template
 -------------------------------------
 
-.. todo DEMOS
-
 To start a new branch, run:
 
 ::
@@ -32,10 +30,27 @@ If you provide a ticket number, this will create a git commit message template f
     
     [<ticket#>] 
 
+Demos
+~~~~~
+
+Starting a project branch:
+
+.. image:: https://raw.githubusercontent.com/connordelacruz/git-workflow/assets/start/0-start-prompt.gif
+
+Commit message will include the specified ticket number:
+
+.. image:: https://raw.githubusercontent.com/connordelacruz/git-workflow/assets/start/1-commit-message.gif
+
+Different branches can use different commit templates:
+
+.. image:: https://raw.githubusercontent.com/connordelacruz/git-workflow/assets/start/2-args-and-per-branch.gif
+
+👆 You can also use command line arguments to skip the prompts. Each workflow
+command supports a variety of command line options.
+
+
 Finish a Branch
 ---------------
-
-.. todo DEMOS
 
 When you're finished with a project branch that has been merged, run:
 
@@ -45,10 +60,14 @@ When you're finished with a project branch that has been merged, run:
 
 This will clean up configs, remove the branch's commit template, and delete the branch.
 
+Demo
+~~~~~
+
+.. image:: https://raw.githubusercontent.com/connordelacruz/git-workflow/assets/finish/0-finish.gif
+
+
 Create a Commit Template for an Existing Branch
 -----------------------------------------------
-
-.. todo DEMOS
 
 If you already have a branch created and would like to create a commit template, run:
 
@@ -56,11 +75,14 @@ If you already have a branch created and would like to create a commit template,
 
     workflow set-template
 
+Demo
+~~~~~
+
+.. image:: https://raw.githubusercontent.com/connordelacruz/git-workflow/assets/set-template/0-set-template.gif
+
 
 Remove a Branch's Commit Template
 ---------------------------------
-
-.. todo DEMOS
 
 To remove a branch's commit template without deleting the branch, run:
 
@@ -68,11 +90,14 @@ To remove a branch's commit template without deleting the branch, run:
 
     workflow unset-template
 
+Demo
+~~~~~
 
-Cleanup Commit Templates in a Repo
-----------------------------------
+.. image:: https://raw.githubusercontent.com/connordelacruz/git-workflow/assets/unset-template/0-unset-template.gif
 
-.. todo DEMOS
+
+Cleanup All Commit Templates in a Repo
+--------------------------------------
 
 If you have a bunch of lingering commit templates and would like to tidy up, run:
 
@@ -81,6 +106,12 @@ If you have a bunch of lingering commit templates and would like to tidy up, run
     workflow cleanup
 
 By default, this will clean up configs and template files for every branch except the one you have checked out. It will also look for orphaned commit templates with no associated branch and remove them.
+
+Demo
+~~~~~
+
+.. image:: https://raw.githubusercontent.com/connordelacruz/git-workflow/assets/cleanup/0-cleanup.gif
+
 
 Setup
 =====
@@ -164,7 +195,7 @@ To ignore generated template files in a single git repo, add the following to th
 
 Workflow Commands
 =================
-.. todo insert sections for remaining commands 
+
 
 **Usage:** ``workflow <command>``
 
@@ -581,5 +612,4 @@ Enhancements
 Documentation
 -------------
 
-- Add demo GIFs of commands in action to README.
 - Generate API docs using Sphinx.
