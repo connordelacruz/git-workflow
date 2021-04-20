@@ -82,7 +82,10 @@ class StartBranch(WorkflowBase):
             action='store_true', default=False
         )
         base_branch_group.add_argument(
-            '-P', '--no-pull', help='Skip pulling changes to base branch.',
+            '-r', '--base-release', metavar='<tag>', help='Branch from the specified git tag'
+        )
+        branching_args.add_argument(
+            '-P', '--no-pull', help='Skip pulling changes to base branch',
             action='store_true', default=False
         )
 
@@ -148,6 +151,8 @@ class StartBranch(WorkflowBase):
             base_branch = self.repo.active_branch.name
         args['base_branch'] = base_branch
 
+        args['base_release'] = self.parsed_args.base_release
+
         args['no_pull'] = self.parsed_args.no_pull
 
         args['skip_bad_name_check'] = self.parsed_args.skip_bad_name_check
@@ -164,32 +169,45 @@ class StartBranch(WorkflowBase):
             else:
                 # Will raise exception if name doesn't check out
                 self.check_branch_name(branch_name)
-        # Checkout base_branch
+        # Checkout base branch or tag
         base_branch = args['base_branch']
-        # TODO support tags with 'refs/tags/'; maybe --release/-r arg
-        base_head = Head(self.repo, f'refs/heads/{base_branch}')
-        if self.repo.active_branch != base_head:
-            base_head.checkout()
-        # Update
-        if not args['no_pull'] and base_head.tracking_branch():
-            self.print(f'Pulling updates to {base_branch}...')
-            remote_name = base_head.tracking_branch().remote_name
-            remote = Remote(self.repo, remote_name)
-            base_commit = base_head.commit
-            for fetch_info in remote.pull():
-                if fetch_info.ref == base_head.tracking_branch():
-                    if fetch_info.commit != base_commit:
-                        self.print(f'Updated {base_branch} to {fetch_info.commit.hexsha}')
-                    else:
-                        self.print(f'{base_branch} already up to date.')
-            self.print('')
-        # Checkout new branch
-        self.print(f'Creating new branch {branch_name}...')
-        new_active_branch = base_head.checkout(b=branch_name)
-        if new_active_branch.name == branch_name:
+        base_release = args['base_release']
+        new_active_branch = None
+        # base_release will only be set if the --base-release arg is specified, overrides base branch
+        if base_release is None:
+            base_head = Head(self.repo, f'refs/heads/{base_branch}')
+            if self.repo.active_branch != base_head:
+                base_head.checkout()
+            # Update
+            if not args['no_pull'] and base_head.tracking_branch():
+                self.print(f'Pulling updates to {base_branch}...')
+                remote_name = base_head.tracking_branch().remote_name
+                remote = Remote(self.repo, remote_name)
+                base_commit = base_head.commit
+                for fetch_info in remote.pull():
+                    if fetch_info.ref == base_head.tracking_branch():
+                        if fetch_info.commit != base_commit:
+                            self.print(f'Updated {base_branch} to {fetch_info.commit.hexsha}')
+                        else:
+                            self.print(f'{base_branch} already up to date.')
+                self.print('')
+            # Checkout new branch
+            self.print(f'Creating new branch {branch_name}...')
+            new_active_branch = base_head.checkout(b=branch_name)
+        else:
+            # Update
+            if not args['no_pull'] and self.repo.remotes:
+                self.print('Fetching tags from remote...', '')
+                self.repo.git.fetch(all=True, tags=True)
+            self.print(f'Creating new branch {branch_name}...')
+            self.repo.git.checkout(base_release, b=branch_name)
+            new_active_branch = self.repo.active_branch
+        # Verify branch
+        if new_active_branch is not None and new_active_branch.name == branch_name:
             self.print_success('Branch created.', '')
         else:
-            pass # TODO should we get here? checkout() should raise exception
+            # Not sure we'd ever get here, but print an error anyway to be safe
+            raise Exception(f'Unable to create branch {branch_name} due to an unknown error.')
         # If specified, call commit-template
         if args['ticket']:
             self.print('Checking ticket number format...')
