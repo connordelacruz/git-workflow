@@ -24,6 +24,7 @@ Git Workflow Tools
 
 
 .. contents::
+    :depth: 2
 
 Overview
 ========
