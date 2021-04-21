@@ -224,7 +224,7 @@ Usage
 
 ::
 
-    usage: workflow start [-h] [-V] [-c <client> | -C] [-d <description>] [-i <initials>] [-s] [-t <ticket#> | -T] [-b <branch> | -B | -P]
+    usage: workflow start [-h] [-V] [-c <client> | -C] [-d <description>] [-i <initials>] [-s] [-t <ticket#> | -T] [-b <branch> | -B | -r <tag>] [-P]
     
     Create a new branch.
     
@@ -253,7 +253,9 @@ Usage
                             Specify branch to use as base for new branch (default: master)
       -B, --branch-from-current
                             Use currently checked out branch as base (overrides -b)
-      -P, --no-pull         Skip pulling changes to base branch.
+      -r <tag>, --base-release <tag>
+                            Branch from the specified git tag
+      -P, --no-pull         Skip pulling changes to base branch
     
 
 Configs
