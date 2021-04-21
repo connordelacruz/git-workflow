@@ -2,6 +2,27 @@
 Git Workflow Tools
 ==================
 
+|github|
+|pypi|
+|license|
+|pythonversions|
+
+.. |github| image:: https://img.shields.io/badge/GitHub--green.svg?style=social&logo=github
+    :alt: GitHub
+    :target: https://github.com/connordelacruz/git-workflow
+
+.. |pypi| image:: https://img.shields.io/pypi/v/git-workflow.svg
+    :alt: PyPI
+    :target: https://pypi.org/project/git-workflow/
+
+.. |license| image:: https://img.shields.io/pypi/l/git-workflow.svg
+    :alt: License
+
+.. |pythonversions| image:: https://img.shields.io/pypi/pyversions/git-workflow.svg
+    :alt: Python Versions
+    :target: https://pypi.org/project/git-workflow/
+
+
 .. contents::
 
 Overview
