@@ -215,6 +215,48 @@ To ignore generated template files in a single git repo, add the following to th
     .gitmessage_local*
 
 
+Enable Tab Completion for Workflow Commands
+-------------------------------------------
+
+This package utilizes `argcomplete <https://pypi.org/project/argcomplete/>`_ to support tab completion in Bash. Some additional setup is required to enable tab completion.
+
+Prereq: Enable Tab Completion in Bash
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you haven't already, you will need to enable tab completion in Bash. You can follow `this guide to enable Bash Completion on macOS <https://sourabhbajaj.com/mac-setup/BashCompletion/>`_.
+
+Activate Tab Completion
+~~~~~~~~~~~~~~~~~~~~~~~
+
+After setting up tab completion for Bash, you need to activate tab completion for ``argcomplete``. This can be done a couple of ways depending on your Bash version.
+
+Option 1: Activate Global Completion for argcomplete (Bash 4.2+)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you have Bash 4.2 or greater, you can simply run the following command:
+
+::
+
+    activate-global-python-argcomplete
+
+Then restart Bash for these changes to take effect.
+
+.. note::
+
+    The default version of Bash on macOS is 3.2.57. You can follow `this guide to update to a newer version <https://itnext.io/upgrading-bash-on-macos-7138bd1066ba>`_.
+
+Option 2: Activate Completion for Just This Package
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you're on an older version of Bash or do not want to enable global completion for some reason, add the following to your ``.bash_rc``:
+
+::
+
+    eval "$(register-python-argcomplete workflow)"
+
+Then restart Bash for these changes to take effect.
+
+
 Workflow Commands
 =================
 
