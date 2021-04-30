@@ -53,6 +53,7 @@ def main():
     # Argument Parser
     parser = get_parser()
     argcomplete.autocomplete(parser)
+    parsed_args = parser.parse_args()
     # Check installed git version
     # TODO allow limited functionality for lower git versions in future update?
     try:
@@ -72,7 +73,7 @@ def main():
         if repo is None:
             return
     try:
-        run_command(repo, parser)
+        run_command(repo, parser, parsed_args=parsed_args)
     except KeyboardInterrupt:
         print('')
         sys.exit(0)

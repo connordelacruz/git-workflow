@@ -26,13 +26,16 @@ def add_command_subparsers(subparsers, generic_parent_parser):
         commandClass.add_subparser(subparsers, generic_parent_parser)
 
 
-def run_command(repo, parser):
+def run_command(repo, parser, parsed_args=None):
     """Run a workflow command.
 
     :param repo: Repo object
     :param parser: ArgumentParser object
+    :param parsed_args: (Optional) Result of parser.parse_args() if already
+        called
     """
-    parsed_args = parser.parse_args()
+    if parsed_args is None:
+        parsed_args = parser.parse_args()
     command_class = commands.get(parsed_args.command, False)
     if not command_class:
         # exit_code = 1 # TODO implement? or raise specific exception
