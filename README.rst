@@ -198,10 +198,10 @@ Configure Global .gitignore (RECOMMENDED)
         # Commit message templates
         .gitmessage_local*
 
-> For more information on ``core.excludesfile``:
->
-> - `GitHub - Ignoring files <https://docs.github.com/en/github/using-git/ignoring-files#configuring-ignored-files-for-all-repositories-on-your-computer>`_
-> - `Git Configuration - core.excludesfile <https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_core_excludesfile>`_
+For more information on ``core.excludesfile``:
+
+- `GitHub - Ignoring files <https://docs.github.com/en/github/using-git/ignoring-files#configuring-ignored-files-for-all-repositories-on-your-computer>`_
+- `Git Configuration - core.excludesfile <https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_core_excludesfile>`_
 
 
 Ignore for a Single Repo
