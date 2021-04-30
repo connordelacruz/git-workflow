@@ -43,6 +43,7 @@ setup(
     install_requires=[
         'GitPython>=3.1,<3.2',
         'blessings>=1.7,<1.8',
+        'argcomplete>=1.12,<1.13',
     ],
     extras_require={
         'dev': [

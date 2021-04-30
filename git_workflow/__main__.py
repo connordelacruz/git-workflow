@@ -1,6 +1,8 @@
+# PYTHON_ARGCOMPLETE_OK
 import argparse
 import os
 import sys
+import argcomplete
 from git import Repo
 from git.exc import InvalidGitRepositoryError, NoSuchPathError
 from git_workflow.__about__ import __version__
@@ -48,6 +50,9 @@ def get_parser(prog=None):
 
 
 def main():
+    # Argument Parser
+    parser = get_parser()
+    argcomplete.autocomplete(parser)
     # Check installed git version
     # TODO allow limited functionality for lower git versions in future update?
     try:
@@ -66,8 +71,6 @@ def main():
     finally:
         if repo is None:
             return
-    # Argument Parser
-    parser = get_parser()
     try:
         run_command(repo, parser)
     except KeyboardInterrupt:
