@@ -18,10 +18,7 @@ class UnsetTemplate(WorkflowBase):
 
     @classmethod
     def add_subparser(cls, subparsers, generic_parent_parser):
-        unset_commit_template_subparser = subparsers.add_parser(
-            cls.command, description=cls.description, help=cls.description,
-            parents=[generic_parent_parser], add_help=False
-        )
+        unset_commit_template_subparser = cls._add_base_subparser(subparsers, generic_parent_parser)
         # Specify branch
         positional_args = unset_commit_template_subparser.add_argument_group(
             'Positional Arguments'

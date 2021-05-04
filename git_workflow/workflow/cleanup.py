@@ -27,10 +27,7 @@ class Cleanup(WorkflowBase):
 
     @classmethod
     def add_subparser(cls, subparsers, generic_parent_parser):
-        cleanup_subparser = subparsers.add_parser(
-            cls.command, description=cls.description, help=cls.description,
-            parents=[generic_parent_parser], add_help=False
-        )
+        cleanup_subparser = cls._add_base_subparser(subparsers, generic_parent_parser)
         # Cleanup Options
         cleanup_args = cleanup_subparser.add_argument_group(
             'Cleanup Options'

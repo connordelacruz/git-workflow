@@ -24,6 +24,21 @@ class WorkflowBase(ABC):
     #: Names of git configs used in this command
     configs_used = []
 
+    @classmethod
+    def _add_base_subparser(cls, subparsers, generic_parent_parser):
+        """Common setup for initializing subparser.
+
+        :param subparsers: Subparsers object
+        :param generic_parent_parser: Instance of argparse.ArgumentParser used
+            as a parent for top level parser
+
+        :return: Subparser object
+        """
+        return subparsers.add_parser(
+            cls.command, description=cls.description, help=cls.description,
+            parents=[generic_parent_parser], add_help=False
+        )
+
     # Abstract Properties and Methods
 
     @property

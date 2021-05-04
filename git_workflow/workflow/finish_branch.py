@@ -23,10 +23,7 @@ class FinishBranch(WorkflowBase):
 
     @classmethod
     def add_subparser(cls, subparsers, generic_parent_parser):
-        finish_subparser = subparsers.add_parser(
-            cls.command, description=cls.description, help=cls.description,
-            parents=[generic_parent_parser], add_help=False
-        )
+        finish_subparser = cls._add_base_subparser(subparsers, generic_parent_parser)
         # TODO: no_pull? -D?
         # Specify branch
         positional_args = finish_subparser.add_argument_group(

@@ -31,10 +31,7 @@ class StartBranch(WorkflowBase):
 
     @classmethod
     def add_subparser(cls, subparsers, generic_parent_parser):
-        branch_subparser = subparsers.add_parser(
-            cls.command, description=cls.description, help=cls.description,
-            parents=[generic_parent_parser], add_help=False
-        )
+        branch_subparser = cls._add_base_subparser(subparsers, generic_parent_parser)
         # Branch Name
         branch_name_args = branch_subparser.add_argument_group(
             'Branch Name Arguments'
