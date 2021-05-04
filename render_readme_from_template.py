@@ -13,7 +13,7 @@ import textwrap
 from git import Repo
 import jinja2
 from git_workflow.__about__ import *
-from git_workflow.__main__ import get_parser
+from git_workflow.utils.parser import get_parser
 from git_workflow.workflow import commands
 from git_workflow.utils.configs import Configs
 
