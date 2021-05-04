@@ -224,7 +224,7 @@ By default, ``workflow start`` will prompt you for your initials every time you 
 
     git config --global workflow.initials cd
 
-For more information, see the `Configs`_ section below.
+For more information, see the `Git Configurations`_ section below.
 
 
 (Optional) Enable Tab Completion for Workflow Commands
