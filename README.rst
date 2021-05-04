@@ -181,8 +181,8 @@ Configure Git to Ignore Commit Template Files
 
 These commands generate files for commit templates, which you likely do not want to track in your repos.
 
-Configure Global .gitignore (RECOMMENDED)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Option 1: Configure Global .gitignore (RECOMMENDED)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1. Create a global gitignore file, e.g. ``~/.gitignore_global``
 2. Set the global git config for ``core.excludesfile`` to the path of your global gitignore, e.g.:
@@ -204,8 +204,8 @@ For more information on ``core.excludesfile``:
 - `Git Configuration - core.excludesfile <https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_core_excludesfile>`_
 
 
-Ignore for a Single Repo
-~~~~~~~~~~~~~~~~~~~~~~~~
+Option 2: Ignore for a Single Repo
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To ignore generated template files in a single git repo, add the following to the ``.gitignore`` file:
 
@@ -215,8 +215,20 @@ To ignore generated template files in a single git repo, add the following to th
     .gitmessage_local*
 
 
-Enable Tab Completion for Workflow Commands
--------------------------------------------
+Configure Your Initials
+-----------------------
+
+By default, ``workflow start`` will prompt you for your initials every time you start a new branch. You can set the git config ``workflow.initials`` to skip this prompt, e.g. to set your initials to "cd":
+
+::
+
+    git config --global workflow.initials cd
+
+For more information, see the `Configs`_ section below.
+
+
+(Optional) Enable Tab Completion for Workflow Commands
+------------------------------------------------------
 
 This package utilizes `argcomplete <https://pypi.org/project/argcomplete/>`_ to support tab completion in Bash. Some additional setup is required to enable tab completion.
 
