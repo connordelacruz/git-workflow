@@ -673,11 +673,6 @@ prompt for confirmation unless ``-c`` is specified.
 Future Updates
 ==============
 
-New Commands
-------------
-
-- ``workflow rename``: Rename a branch while maintaining its current commit template.
-
 Enhancements
 ------------
 
