@@ -1,5 +1,4 @@
 import os
-from git import GitCommandError
 from git_workflow.utils import cmd
 from .base import WorkflowBase
 

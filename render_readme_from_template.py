@@ -8,7 +8,6 @@ Requires Jinja2, which is included in the dev extras. To install these, run:
 from contextlib import redirect_stdout
 from io import StringIO
 import os
-import sys
 import textwrap
 from git import Repo
 import jinja2

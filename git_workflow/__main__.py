@@ -17,7 +17,7 @@ def main():
     parsed_args = parser.parse_args()
     # Check installed git version
     try:
-        min_git_version_met = repository.verify_git_version()
+        repository.verify_git_version()
     except Exception as e:
         cmd.print_error(e)
         return

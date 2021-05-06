@@ -19,4 +19,4 @@ else
 fi
 # Cleanup
 rm dist/*
-
+# TODO what about build/*??

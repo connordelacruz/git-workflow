@@ -43,13 +43,13 @@ class WorkflowBase(ABC):
 
     @property
     @abstractmethod
-    def command():
+    def command(self):
         """Subcommand name"""
         pass
 
     @property
     @abstractmethod
-    def description():
+    def description(self):
         """Subcommand description"""
         pass
 
@@ -71,7 +71,6 @@ class WorkflowBase(ABC):
 
     # Helper Methods
 
-    # TODO better handling of indentation
     def print(self, *lines, required_verbosity=1, **print_multiline_kwargs):
         """Print a message.
 
