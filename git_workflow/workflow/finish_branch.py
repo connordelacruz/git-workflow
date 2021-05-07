@@ -1,5 +1,6 @@
-from git import Head, Remote, GitCommandError
+from git import GitCommandError
 from git_workflow.utils import cmd
+from git_workflow.utils.repository import checkout_branch
 from .base import WorkflowBase
 from .unset_template import UnsetTemplate
 
@@ -78,26 +79,9 @@ class FinishBranch(WorkflowBase):
                                        parsed_args=unset_template_parsed_args,
                                        verbosity=self.verbosity)
         unset_template.run()
-        # TODO extract this and StartBranch common code to utils?
         # Checkout base_branch
         base_branch = self.configs.BASE_BRANCH
-        base_head = Head(self.repo, f'refs/heads/{base_branch}')
-        if self.repo.active_branch != base_head:
-            self.print(f'Switching to {base_branch}...')
-            base_head.checkout()
-        # Update
-        if base_head.tracking_branch():
-            self.print(f'Pulling updates to {base_branch}...')
-            remote_name = base_head.tracking_branch().remote_name
-            remote = Remote(self.repo, remote_name)
-            base_commit = base_head.commit
-            for fetch_info in remote.pull():
-                if fetch_info.ref == base_head.tracking_branch():
-                    if fetch_info.commit != base_commit:
-                        self.print(f'Updated {base_branch} to {fetch_info.commit.hexsha}')
-                    else:
-                        self.print(f'{base_branch} already up to date.')
-            self.print('')
+        base_head = checkout_branch(self.repo, base_branch)
         # Finish branch
         self.print(f'Attempting to delete {branch}...')
         try:

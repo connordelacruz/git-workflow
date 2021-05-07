@@ -1,7 +1,7 @@
 import datetime
 import re
-from git import Head, Remote
 from git_workflow.utils import cmd
+from git_workflow.utils.repository import checkout_branch, fetch_tags
 from .base import WorkflowBase
 from .set_template import SetTemplate
 
@@ -172,31 +172,15 @@ class StartBranch(WorkflowBase):
         new_active_branch = None
         # base_release will only be set if the --base-release arg is specified, overrides base branch
         if base_release is None:
-            base_head = Head(self.repo, f'refs/heads/{base_branch}')
-            if self.repo.active_branch != base_head:
-                base_head.checkout()
-            # Update
-            if not args['no_pull'] and base_head.tracking_branch():
-                self.print(f'Pulling updates to {base_branch}...')
-                remote_name = base_head.tracking_branch().remote_name
-                remote = Remote(self.repo, remote_name)
-                base_commit = base_head.commit
-                for fetch_info in remote.pull():
-                    if fetch_info.ref == base_head.tracking_branch():
-                        if fetch_info.commit != base_commit:
-                            self.print(f'Updated {base_branch} to {fetch_info.commit.hexsha}')
-                        else:
-                            self.print(f'{base_branch} already up to date.')
-                self.print('')
+            base_head = checkout_branch(self.repo, base_branch, no_pull=args['no_pull'])
             # Checkout new branch
             self.print(f'Creating new branch {branch_name}...')
             new_active_branch = base_head.checkout(b=branch_name)
         else:
             # Update
-            if not args['no_pull'] and self.repo.remotes:
-                self.print('Fetching tags from remote...', '')
-                self.repo.git.fetch(all=True, tags=True)
-            self.print(f'Creating new branch {branch_name}...')
+            if not args['no_pull']:
+                fetch_tags(self.repo)
+            self.print(f'Creating new branch {branch_name} based on tag {base_release}...')
             self.repo.git.checkout(base_release, b=branch_name)
             new_active_branch = self.repo.active_branch
         # Verify branch

@@ -1,9 +1,11 @@
 """Utilities for common interactions with git repo."""
 import os
-from git import GitCommandError
+from git import GitCommandError, Head, Remote
 from git.cmd import Git as GitCmd
 from git_workflow.__about__ import __min_git_version__
 
+
+# Git Verification + Workflow Config Methods
 
 def verify_git_version(strict=True):
     """Returns True if minimum git version is met for advanced features"""
@@ -86,3 +88,44 @@ def initialize(repo):
             pass # TODO ERROR
     # TODO don't bother returning once exceptions are implemented
     return workflow_config_file_exists and workflow_config_included
+
+
+# Common Git Actions
+
+def checkout_branch(repo, branch_name, no_pull=False):
+    """Checkout a branch and optionally pull updates.
+
+    :param repo: Repo object
+    :param branch_name: Name of the branch to checkout
+    :param no_pull: (Default: False) If True, don't pull changes to branch
+
+    :return: Head object for the checked out branch
+    """
+    base_head = Head(repo, f'refs/heads/{branch_name}')
+    if repo.active_branch != base_head:
+        print(f'Checking out {branch_name}.')
+        base_head.checkout()
+    if not no_pull and base_head.tracking_branch():
+        print(f'Pulling updates to {branch_name}...')
+        remote_name = base_head.tracking_branch().remote_name
+        remote = Remote(repo, remote_name)
+        base_commit = base_head.commit
+        for fetch_info in remote.pull():
+            if fetch_info.ref == base_head.tracking_branch():
+                if fetch_info.commit != base_commit:
+                    print(f'Updated {branch_name} to {fetch_info.commit.hexsha}')
+                else:
+                    print(f'{branch_name} already up to date.')
+        print('')
+    return base_head
+
+
+def fetch_tags(repo):
+    """Shorthand for git fetch --all --tags
+
+    :param repo: Repo object
+    """
+    if repo.remotes:
+        print('Fetching tags from remote...')
+        print('')
+        repo.git.fetch(all=True, tags=True)
