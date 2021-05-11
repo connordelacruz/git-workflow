@@ -673,12 +673,16 @@ prompt for confirmation unless ``-c`` is specified.
 Future Updates
 ==============
 
-Enhancements
-------------
+Planned
+-------
 
-- Support ``--verbosity`` argument on all commands.
+- Config to disable "Client" prompt.
 
-Documentation
--------------
+Backburner
+----------
+
+Low-priority updates that may be added in a future release:
 
 - Generate API docs using Sphinx.
+- Support ``--verbosity`` argument on all commands.
+- ``rename`` command: renames branch while keeping its commit template configured.
