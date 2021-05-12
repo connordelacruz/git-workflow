@@ -677,6 +677,7 @@ Planned
 -------
 
 - Config to disable "Client" prompt.
+- Add ``-R``/``--branch-from-latest-release`` to ``workflow start``
 
 Backburner
 ----------
