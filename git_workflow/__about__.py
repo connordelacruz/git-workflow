@@ -10,7 +10,7 @@ __package__ = 'git-workflow'
 #: Base command
 __command__ = 'workflow'
 #: Package version
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 #: Minimum required python version
 __min_python_version__ = '3.6'
 #: Minimum required git version for advanced features
