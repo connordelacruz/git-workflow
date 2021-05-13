@@ -1,10 +1,12 @@
 """Package info"""
 
 __all__ = [
-    '__command__', '__version__', '__min_python_version__', '__min_git_version__',
-    '__url__',
+    '__package__', '__command__', '__version__', '__min_python_version__',
+    '__min_git_version__', '__url__',
 ]
 
+#: Package name
+__package__ = 'git-workflow'
 #: Base command
 __command__ = 'workflow'
 #: Package version
