@@ -6,9 +6,10 @@ parser = get_parser()
 argcomplete.autocomplete(parser)
 import os
 import sys
+from cmd_utils import cmd
 from git import Repo
 from git.exc import InvalidGitRepositoryError, NoSuchPathError
-from git_workflow.utils import cmd, repository
+from git_workflow.utils import repository
 from git_workflow.workflow import run_command
 
 

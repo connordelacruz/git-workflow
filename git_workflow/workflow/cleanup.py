@@ -1,7 +1,7 @@
 import glob
 import os
 import re
-from git_workflow.utils import cmd
+from cmd_utils import cmd
 from .base import WorkflowBase
 from .unset_template import UnsetTemplate
 

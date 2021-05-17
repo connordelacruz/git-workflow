@@ -1,5 +1,5 @@
 from git import GitCommandError
-from git_workflow.utils import cmd
+from cmd_utils import cmd
 from git_workflow.utils.repository import checkout_branch
 from .base import WorkflowBase
 from .unset_template import UnsetTemplate

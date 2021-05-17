@@ -1,6 +1,6 @@
 import datetime
 import re
-from git_workflow.utils import cmd
+from cmd_utils import cmd
 from git_workflow.utils.repository import checkout_branch, fetch_tags
 from .base import WorkflowBase
 from .set_template import SetTemplate

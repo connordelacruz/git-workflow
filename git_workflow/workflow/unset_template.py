@@ -1,5 +1,5 @@
 import os
-from git_workflow.utils import cmd
+from cmd_utils import cmd
 from .base import WorkflowBase
 
 

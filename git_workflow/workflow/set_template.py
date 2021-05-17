@@ -1,5 +1,6 @@
 import os
-from git_workflow.utils import cmd, files
+from cmd_utils import cmd
+from git_workflow.utils import files
 from .base import WorkflowBase
 
 

@@ -32,7 +32,7 @@ setup(
         'Environment :: Console :: Curses',
         'Topic :: Software Development :: Version Control :: Git',
         'Topic :: Software Development',
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
     ],
     packages=find_packages(),
     entry_points={
@@ -42,7 +42,7 @@ setup(
     },
     install_requires=[
         'GitPython==3.1.11',
-        'blessings>=1.7,<1.8',
+        'cmd-utils>=1.0.0,<1.1',
         'argcomplete>=1.12,<1.13',
     ],
     extras_require={
