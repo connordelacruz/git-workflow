@@ -426,7 +426,12 @@ Planned
 -------
 
 - Config to disable "Client" prompt.
-- Add ``-R``/``--branch-from-latest-release`` to ``workflow start``
+- Add ``-R``/``--branch-from-latest-release`` to ``workflow start`` (Source_) ::
+  
+    git describe --tags `git rev-list --tags --max-count=1`
+
+.. _Source: https://stackoverflow.com/questions/4277773/how-to-get-latest-tag-name
+
 
 Backburner
 ----------
