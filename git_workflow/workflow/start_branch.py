@@ -100,7 +100,7 @@ class StartBranch(WorkflowBase):
                 'Client',
                 '(Optional) Enter the name of the affected client.',
                 initial_input=self.parsed_args.client,
-                validate_function=cmd.validate_optional_prompt,
+                optional=True,
                 format_function=self.format_branch_name,
             )
         # Append hyphen if client is not empty
@@ -135,8 +135,8 @@ class StartBranch(WorkflowBase):
                 'Ticket Number',
                 '(Optional) Enter ticket number to use in commit messages.',
                 "Leave blank if you don't want to use a commit template.",
+                optional=True,
                 initial_input=self.parsed_args.ticket,
-                validate_function=cmd.validate_optional_prompt,
             )
         args['ticket'] = ticket
 
