@@ -104,9 +104,10 @@ class Cleanup(WorkflowBase):
         # Confirmation
         if args['confirm']:
             confirmation = cmd.prompt(
-                'Confirm (y/n)',
+                'Confirm',
                 'Would you like to continue?',
-                default_val='n', validate_function=cmd.validate_yn
+                prompt_type=cmd.TYPE_YES_NO,
+                default_val='n'
             )
             if not confirmation:
                 return

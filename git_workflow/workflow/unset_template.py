@@ -72,9 +72,10 @@ class UnsetTemplate(WorkflowBase):
         # Confirmation prompt
         if args['confirm']:
             confirmation = cmd.prompt(
-                'Unset Template? (y/n)',
+                'Unset Template?',
                 f'Unset commit template for {branch}?',
-                default_val='n', validate_function=cmd.validate_yn
+                prompt_type=cmd.TYPE_YES_NO,
+                default_val='n'
             )
             if not confirmation:
                 return

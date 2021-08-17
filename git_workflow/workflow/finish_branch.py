@@ -67,9 +67,10 @@ class FinishBranch(WorkflowBase):
         # Confirmation prompt
         if args['confirm']:
             confirmation = cmd.prompt(
-                'Delete Branch? (y/n)',
+                'Delete Branch?',
                 f'Delete branch {branch}?',
-                default_val='n', validate_function=cmd.validate_yn
+                prompt_type=cmd.TYPE_YES_NO,
+                default_val='n'
             )
             if not confirmation:
                 return
