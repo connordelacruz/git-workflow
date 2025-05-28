@@ -191,7 +191,8 @@ class StartBranch(WorkflowBase):
             raise Exception(f'Unable to create branch {branch_name} due to an unknown error.')
         # If specified, call commit-template
         if args['ticket']:
-            self.print('Checking ticket number format...')
+            # TODO VERBOSE OUTPUT:
+            # self.print(f'Calling set-template with ticket number input "{args["ticket"]}"')
             set_template_parsed_args = self.parser.parse_args([SetTemplate.command, args['ticket']])
             set_template = SetTemplate(self.repo, self.parser,
                                        parsed_args=set_template_parsed_args,

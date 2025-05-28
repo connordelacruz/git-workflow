@@ -42,6 +42,7 @@ setup(
     },
     install_requires=[
         'GitPython==3.1.11',
+        # TODO: >=1.1.0,<1.2
         'cmd-utils>=1.0.0,<1.1',
         'argcomplete>=1.12,<1.13',
     ],
